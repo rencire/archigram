@@ -100,19 +100,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
   // d3 element handlers
-  function handleMouseDown(d) {
+  function handleShapeMousedown(d) {
     console.log('on mousedown');
     if(d3.event.shiftKey) {
       state.add_edge_mode = true;
       state.new_edge_source = d; 
 
-      // position drag edge to origin of current shape
+      // position dragline to origin of current shape
       var center_x = (d.x + d.width/2);
       var center_y = (d.y + d.height/2);
-      dragline.attr('d', 
-          'M' + center_x + ',' + center_y +
-          'L' + 300 + ',' + 300
-      );
+
+      // display dragline
+      dragline.classed('hidden', false);
+      // dragline.attr('d', 
+      //     'M' + center_x + ',' + center_y +
+      //     'L' + 300 + ',' + 300
+      // );
     }
   }
 
@@ -145,21 +148,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // saveData(state);
   }
 
-  function handledragend(d, index) {
-    console.log("dragend");
-    console.log(d);
-    // d is the object we started drag event with (dragstart)
-  }
 
-  function boardMouseUp() {
+  function handleBoardMouseup() {
     console.log("mouseup board");
     if (state.add_edge_mode) {
       state.add_edge_mode = false;
+      resetDragLine(dragline);
       console.log("ended add_edge_mode from board");
+
     }
   }
 
-  function shapeMouseUp(target, index) {
+  function handleShapeMouseup(target, index) {
     console.log("mouseup shape");
     // stop mouseup event bubbling up to svg
     // d3.event.sourceEvent.stopPropagation();
@@ -170,10 +170,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (state.add_edge_mode && target !== state.new_edge_source) {
 
       createEdge(state.new_edge_source, target);
-      resetDragLine(dragline);
-
-      state.add_edge_mode = false;
-      console.log("ended add_edge_mode from shape");
+      console.log("added edge to data, rendered new edge");
     }
   }
 
@@ -192,9 +189,99 @@ document.addEventListener("DOMContentLoaded", function(event) {
       .attr('d', renderPath);
   }
 
+  // calculate path. 
+  // If edge is directed, we are drawing the path a little bit away from
+  // the shape for aesthetic reasons
+  //
+  // 'd' is an edge datum
+  //
   function renderPath(d) {
-    return "M" + center(d.from).x + "," + center(d.from).y + 
-           "L" + center(d.to).x + "," + center(d.to).y;
+    var instructions = "M" + center(d.from).x + "," + center(d.from).y + "L"; 
+
+    if (d.directed) {
+      var pnt = calculatePerimeterPoint(d.from, d.to, 0.1);
+      return instructions + pnt.x + "," + pnt.y;
+    } else {
+      return instructions + center(d.to).x + "," + center(d.to).y;
+    }
+  }
+
+
+  // from - shape
+  // to - shape
+  // pad_pct - padding percentage. 
+  //  This padding is extra distance from the end of edge to the perimeter of `to` shape.
+  //
+  // TODO current logic only for rects. consider implementing different strategies for other shapes  
+  function calculatePerimeterPoint(from, to) {
+    // difference from center(to) used for finding perimeter point
+    var in_w;
+    var in_h;
+
+    // distance between center(from) and center(to)
+    var out_w = center(from).x - center(to).x; 
+    var out_h = center(from).y - center(to).y; 
+    
+    // Calculates the distances we need to reposition away from the center of the rectangle
+    if (fromDirection(from,to) === "right") {
+       in_w = to.width/2;
+       in_h = (in_w/out_w) * out_h;
+       return {x: to.x + to.width, y: center(to).y + in_h};
+    }
+
+    if (fromDirection(from,to) === "bottom") {
+       in_h = to.height/2;
+       in_w = (in_h/out_h) * out_w;
+       return {x: center(to).x + in_w, y: to.y + to.height};
+    }
+
+    if (fromDirection(from,to) === "left") {
+       in_w = -to.width/2;
+       in_h = (in_w/out_w) * out_h;
+       return {x: to.x, y: center(to).y + in_h};
+    }
+
+    if (fromDirection(from,to) === "top") {
+       in_h = -to.height/2;
+       in_w = (in_h/out_h) * out_w;
+       return {x: center(to).x + in_w, y: to.y};
+    }
+
+  }
+
+  function fromDirection(from, to) {
+    var from_ctr = center(from);
+    var to_ctr = center(to);
+    var w = to.width/2;
+    var h = to.height/2;
+
+    var angle = Math.atan2(from_ctr.y - to_ctr.y, from_ctr.x - to_ctr.x);
+
+    console.log("angle");
+    console.log(angle);
+
+    var bot_right_angle = Math.atan2(h, w);
+    var bot_left_angle = Math.atan2(h, -w);
+    var top_left_angle = Math.atan2(-h, -w);
+    var top_right_angle = Math.atan2(-h, w);
+
+    if (top_right_angle <= angle && angle < bot_right_angle) {
+      return "right";
+    }
+
+    if (bot_right_angle <= angle && angle < bot_left_angle) {
+      return "bottom";
+    }
+    
+    if (bot_left_angle <= angle || angle < top_left_angle) {
+      return "left";
+    }
+    
+    if (top_left_angle <= angle && angle < top_right_angle) {
+      return "top";
+    }
+
+    // otherwise throw error
   }
 
   function center(rect) {
@@ -213,17 +300,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
   /*
    * drag handlers
    */
-  function dragstart(d, index) {
+  function handleDragstart(d, index) {
   }
 
-  function dragmove(d, index) {
+  function handleDragmove(shape_datum, index) {
     // console.log(state.add_edge_mode);
 
     // If shift key is held, go into "add edge mode"
     // and start drawing edge path 
      if (state.add_edge_mode) {
-        var center_x = (d.x + d.width/2);
-        var center_y = (d.y + d.height/2);
+        var center_x = (shape_datum.x + shape_datum.width/2);
+        var center_y = (shape_datum.y + shape_datum.height/2);
         dragline.attr('d', 
             'M' + center_x + ',' + center_y +
             'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1]
@@ -241,15 +328,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
         //
         // Approach 1: we can store the path attribute as the 'data'
         // Approach 2: select relevant elements and render them
+        // Approach 3: use d3 filter!
         
-        // For approach 2, need to mark dom elements that touch 'd'
-        // d3.selectAll('path.edge')
-          // .attr('d', renderPath);
+        d3.selectAll('path.edge')
+          .filter(function(edge_datum) {
+            return edge_datum.from === shape_datum || edge_datum.to === shape_datum;
+          })
+          .attr('d', renderPath);
 
 
         // TODO consider passing in state as a parameter. State right now is a global var...
-        d.x = d3.event.x; 
-        d.y = d3.event.y; 
+        shape_datum.x = d3.event.x; 
+        shape_datum.y = d3.event.y; 
 
         // TODO consider saving state to localstorage on dragend?
         // or maybe even while dragging?
@@ -257,37 +347,35 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   }
 
+  function handleDragend(d, index) {
+    console.log("dragend");
+    console.log(d);
+    // d is the object we started drag event with (dragstart)
+  }
+
   var drag = d3.behavior.drag()
-    .on("drag", dragmove)
-    .on("dragend", handledragend)
+    .on("drag", handleDragmove)
+    .on("dragend", handleDragend)
     .origin(function(d) {return d;});
 
 
 
 
-  // load initial shapes
+  /*
+   *  load initial shapes
+   */ 
   var svg = d3.select('svg')
-    .on('mouseup', boardMouseUp);
-  var dragline = svg.append('svg:path')
-    .attr('class', 'link')
-    .attr('d', 'M100,100L400,400')
-    .style('marker-end', 'url(#mark-end-arrow)');
+    .on('mouseup', handleBoardMouseup);
 
-  var sel_edge = svg.selectAll('path.edge')
-    .data(state.edges)
-    .enter()
-    .append('path')
-    .classed('edge', true)
-    .classed('link', true)
-    .attr('d', renderPath);
-
-    // add arrow markers
-    // define arrow markers for graph links
+  // add arrow markers
+  // define arrow markers for graph links
+  // borrowed from:
+  // http://bl.ocks.org/cjrd/6863459
   var defs = svg.append('svg:defs');
   defs.append('svg:marker')
     .attr('id', 'end-arrow')
     .attr('viewBox', '0 -5 10 10')
-    .attr('refX', "32")
+    .attr('refX', "10")
     .attr('markerWidth', 3.5)
     .attr('markerHeight', 3.5)
     .attr('orient', 'auto')
@@ -306,24 +394,36 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .attr('d', 'M0,-5L10,0L0,5');
 
 
+  // draw dragline
+  var dragline = svg.append('svg:path')
+    .attr('class', 'link hidden')
+    .attr('d', 'M100,100L400,400')
+    .style('marker-end', 'url(#mark-end-arrow)');
+
+  // draw edges
+  var sel_edge = svg.selectAll('path.edge')
+    .data(state.edges)
+    .enter()
+    .append('path')
+    .classed('edge', true)
+    .classed('link', true)
+    .attr('d', renderPath)
+    .style('marker-end', 'url(#end-arrow)');
 
 
 
-
+  // draw shapes (currently rects)
   var sel_rect = svg.selectAll("rect")
-    .data(state.rects);
-  
-  // paint dom shapes through d3's "joins"
-  // add drag behavior to rects
-  sel_rect.enter().append("rect")
+    .data(state.rects)
+      .enter().append("rect")
       .attr("x", function(d) {return d.x;})
       .attr("y", function(d) {return d.y;})
       .attr("width", function(d) {return d.width;})
       .attr("height", function(d) {return d.height;})
       .classed("highlight", function(d) {return d.highlight;})
       .on("click", toggleSelection)
-      .on("mousedown", handleMouseDown)
-      .on("mouseup", shapeMouseUp)
+      .on("mousedown", handleShapeMousedown)
+      .on("mouseup", handleShapeMouseup)
       .call(drag);
 
 

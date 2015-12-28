@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var instructions = "M" + center(d.from).x + "," + center(d.from).y + "L"; 
 
     if (d.directed) {
-      var pnt = calculatePerimeterPoint(d.from, d.to, 0.1);
+      var pnt = calculatePerimeterPoint(d.from, d.to, 0.25);
       return instructions + pnt.x + "," + pnt.y;
     } else {
       return instructions + center(d.to).x + "," + center(d.to).y;
@@ -213,38 +213,54 @@ document.addEventListener("DOMContentLoaded", function(event) {
   //  This padding is extra distance from the end of edge to the perimeter of `to` shape.
   //
   // TODO current logic only for rects. consider implementing different strategies for other shapes  
-  function calculatePerimeterPoint(from, to) {
+  function calculatePerimeterPoint(from, to, pct) {
+    var padded_to = {
+      x: to.x - (to.width * pct)/2,
+      y: to.y - (to.height * pct)/2,
+      width: to.width + (to.width * pct),
+      height: to.height + (to.height * pct)
+    };
+
+    // svg.append('rect')
+    //   .attr('x', padded_to.x) 
+    //   .attr('y', padded_to.y) 
+    //   .attr('width', padded_to.width) 
+    //   .attr('height', padded_to.height)
+    //   .style('fill', 'red');
+    //
+    // console.log(padded_to);
+
     // difference from center(to) used for finding perimeter point
     var in_w;
     var in_h;
 
     // distance between center(from) and center(to)
-    var out_w = center(from).x - center(to).x; 
-    var out_h = center(from).y - center(to).y; 
+    var out_w = center(from).x - center(padded_to).x; 
+    var out_h = center(from).y - center(padded_to).y; 
     
     // Calculates the distances we need to reposition away from the center of the rectangle
     if (fromDirection(from,to) === "right") {
-       in_w = to.width/2;
+       in_w = padded_to.width/2;
        in_h = (in_w/out_w) * out_h;
-       return {x: to.x + to.width, y: center(to).y + in_h};
+       return {x: padded_to.x + padded_to.width, y: center(padded_to).y + in_h};
     }
 
     if (fromDirection(from,to) === "bottom") {
-       in_h = to.height/2;
+       in_h = padded_to.height/2;
        in_w = (in_h/out_h) * out_w;
-       return {x: center(to).x + in_w, y: to.y + to.height};
+       return {x: center(padded_to).x + in_w, y: padded_to.y + padded_to.height};
     }
 
     if (fromDirection(from,to) === "left") {
-       in_w = -to.width/2;
+       in_w = -padded_to.width/2;
        in_h = (in_w/out_w) * out_h;
-       return {x: to.x, y: center(to).y + in_h};
+       return {x: padded_to.x, y: center(padded_to).y + in_h};
     }
 
     if (fromDirection(from,to) === "top") {
-       in_h = -to.height/2;
+       in_h = -padded_to.height/2;
        in_w = (in_h/out_h) * out_w;
-       return {x: center(to).x + in_w, y: to.y};
+       return {x: center(padded_to).x + in_w, y: padded_to.y};
     }
 
   }
@@ -257,8 +273,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     var angle = Math.atan2(from_ctr.y - to_ctr.y, from_ctr.x - to_ctr.x);
 
-    console.log("angle");
-    console.log(angle);
+    // console.log("angle");
+    // console.log(angle);
 
     var bot_right_angle = Math.atan2(h, w);
     var bot_left_angle = Math.atan2(h, -w);
@@ -375,7 +391,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   defs.append('svg:marker')
     .attr('id', 'end-arrow')
     .attr('viewBox', '0 -5 10 10')
-    .attr('refX', "10")
+    .attr('refX', "7")
     .attr('markerWidth', 3.5)
     .attr('markerHeight', 3.5)
     .attr('orient', 'auto')

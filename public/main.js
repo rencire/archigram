@@ -1,10 +1,9 @@
-// TODO think about how to structure the data models
 
 // Handlers
 function populateStorage() {
   var rects = [
     {id:0, x: 50, y:50, width:100, height:100, highlight: false },
-    {id:1, x: 200, y:100, width:100, height:100, highlight: false},
+    {id:1, x: 200, y:100, width:100, height:200, highlight: false},
     {id:2, x: 350, y:50, width:100, height:100, highlight: false},
   ];
 
@@ -13,7 +12,8 @@ function populateStorage() {
     {id:1, from: 1, to: 2, directed: true}
   ];
 
-  // TODO since we can have multiple edges, we should store edges in its own array.  each edge should have an identifier also to differentiate between other edges between same vertices 
+  // NOTE:
+  // since we can have multiple edges, we should store edges in its own array.  each edge should have an identifier also to differentiate between other edges between same vertices 
   
   state = {
     add_edge_mode:  false,
@@ -28,6 +28,9 @@ function populateStorage() {
 
 }
 
+// TODO 
+// Figure out why saving data breaks the app:
+// - After saving the state, moving a shape does not update the respective edges
 function saveData(state) { 
   if(state === undefined) {
     console.log("No 'state' parameter");
@@ -178,12 +181,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function createEdge(a, b) {
     // add directed edge to state
     addEdge(a, b, true);
-    // TODO 12/22 draw edges from state with d3.selection "enter"
-    // Enter new edge element 
     
-    // Consider using a generalized update function 
+    // NOTE:
+    // - Consider using a generalized update function 
+    // - Need to insert edges before shapes to make sure shape element 
+    //    renders on top of edge elements
     svg.selectAll('path.edge').data(state.edges)
-      .enter().append('path')
+      .enter().insert('path', ':first-child')
       .classed('link', true)
       .classed('edge', true)
       .attr('d', renderPath);
@@ -338,14 +342,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
           .attr('x', d3.event.x)
           .attr('y', d3.event.y); 
 
-        // TODO figure out how to only update edges touching
-        // current shape (d) 
-        // Currently, we are updating all the edges
-        //
-        // Approach 1: we can store the path attribute as the 'data'
-        // Approach 2: select relevant elements and render them
-        // Approach 3: use d3 filter!
-        
         d3.selectAll('path.edge')
           .filter(function(edge_datum) {
             return edge_datum.from === shape_datum || edge_datum.to === shape_datum;
@@ -410,13 +406,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .attr('d', 'M0,-5L10,0L0,5');
 
 
-  // draw dragline
-  var dragline = svg.append('svg:path')
-    .attr('class', 'link hidden')
-    .attr('d', 'M100,100L400,400')
-    .style('marker-end', 'url(#mark-end-arrow)');
 
   // draw edges
+  // Note: need to draw edges before shapes
   var sel_edge = svg.selectAll('path.edge')
     .data(state.edges)
     .enter()
@@ -426,6 +418,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     .attr('d', renderPath)
     .style('marker-end', 'url(#end-arrow)');
 
+  // draw dragline
+  var dragline = svg.append('svg:path')
+    .attr('class', 'link hidden')
+    .attr('d', 'M100,100L400,400')
+    .style('marker-end', 'url(#mark-end-arrow)');
 
 
   // draw shapes (currently rects)

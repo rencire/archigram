@@ -28,9 +28,6 @@ function populateStorage() {
 
 }
 
-// TODO 
-// Figure out why saving data breaks the app:
-// - After saving the state, moving a shape does not update the respective edges
 function saveData(state) { 
   if(state === undefined) {
     console.log("No 'state' parameter");
@@ -46,12 +43,21 @@ function saveData(state) {
   localStorage.setItem('state', JSON.stringify(state));
   console.log(JSON.stringify(state));
   console.log('State saved!');
+
+  // reload shape objects to state
+  loadShapesToState(state);
 }
 
 function loadData() {
   var state = JSON.parse(localStorage.getItem('state'));
 
   // replace `from` and `to` (ids) with respective shape objects
+  loadShapesToState(state);
+  return state;  
+}
+
+// replace `from` and `to` (ids) with respective shape objects
+function loadShapesToState(state) {
   state.edges.forEach(function(e) {
     e.from = state.rects.find(function(shape) {
       return shape.id === e.from;
@@ -60,9 +66,7 @@ function loadData() {
       return shape.id === e.to;
     });
   });
-  return state;  
 }
-
 
 // load sample data if first-time user
 if(localStorage.getItem('state') === "undefined") {

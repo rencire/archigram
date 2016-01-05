@@ -5,11 +5,10 @@ function populateStorage() {
     {id:0, x: 50, y:50, width:100, height:100, highlight: false },
     {id:1, x: 200, y:100, width:100, height:200, highlight: false},
     {id:2, x: 350, y:50, width:100, height:100, highlight: false},
+    {id:3, x: 550, y:50, width:100, height:100, highlight: false},
   ];
 
   var edges = [
-    {id:0, from: 0, to: 1, directed: true},
-    {id:1, from: 1, to: 2, directed: true}
   ];
 
   // NOTE:
@@ -78,27 +77,10 @@ var state = loadData();
  
 // Model accessors
 
-// function getEdges(shapes) {
-//   return shapes.map(function(shape) {
-//     return shape.edges.map(function(other) {
-//       return {from: shape, to: other};
-//     });
-//   }).reduce(function(memo, edges) {
-//     return memo.concat(edges);
-//   });
-// }
-
 // get shape from `shapes` by `id`
 function getShape(id, shapes) {}
 
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", function(event) {
-
 
   // bind plain js functions
   document.querySelector(".save").addEventListener('click', function() {
@@ -181,7 +163,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   }
 
-  // 
   function createEdge(a, b) {
     // add directed edge to state
     addEdge(a, b, true);
@@ -190,18 +171,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // - Consider using a generalized update function 
     // - Need to insert edges before shapes to make sure shape element 
     //    renders on top of edge elements
-    svg.selectAll('path.edge').data(state.edges)
+    svg.selectAll('path.edge').data(state.edges, function(d) {return d.id;})
       .enter().insert('path', ':first-child')
+      // .enter().append('path')
       .classed('link', true)
       .classed('edge', true)
-      .attr('d', renderPath);
+      .attr('d', renderPath)
+      .style('marker-end', 'url(#end-arrow)');
   }
 
-  // calculate path. 
+  //
+  // Calculate path. 
   // If edge is directed, we are drawing the path a little bit away from
   // the shape for aesthetic reasons
   //
   // 'd' is an edge datum
+  //
+  // TODO: figure out how to space out multiple edges between two shapes
+  // - Approach 1: shift origin of both shapes up, and call `calculatePerimeterPoint`.
+  //    Since origin has changed, we need to calculate the point with different width 
+  //    and height
   //
   function renderPath(d) {
     var instructions = "M" + center(d.from).x + "," + center(d.from).y + "L"; 
@@ -322,7 +311,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
   /*
-   * drag handlers
+   * Drag handlers
    */
   function handleDragstart(d, index) {
   }
@@ -346,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
           .attr('x', d3.event.x)
           .attr('y', d3.event.y); 
 
-        d3.selectAll('path.edge')
+        svg.selectAll('path.edge')
           .filter(function(edge_datum) {
             return edge_datum.from === shape_datum || edge_datum.to === shape_datum;
           })
@@ -378,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
   /*
-   *  load initial shapes
+   *  Load initial shapes
    */ 
   var svg = d3.select('svg')
     .on('mouseup', handleBoardMouseup);
@@ -425,7 +414,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // draw dragline
   var dragline = svg.append('svg:path')
     .attr('class', 'link hidden')
-    .attr('d', 'M100,100L400,400')
     .style('marker-end', 'url(#mark-end-arrow)');
 
 

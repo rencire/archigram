@@ -10,6 +10,7 @@ defmodule Server do
   plug :dispatch
 
   get "/" do
+    conn = put_resp_content_type(conn, "text/html")
     send_file(conn, 200, "priv/static/index.html")
   end
 

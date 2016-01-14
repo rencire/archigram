@@ -4,6 +4,7 @@ defmodule Server do
   # use intended for injecting code into current module
   use Plug.Router
 
+  plug Plug.Logger
   plug Plug.Static, at: "/", from: :server
 
   plug :match

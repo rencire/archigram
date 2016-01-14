@@ -1,4 +1,5 @@
 
+export function bootstrap() {
 // Handlers
 function populateStorage() {
   var rects = [
@@ -13,7 +14,7 @@ function populateStorage() {
 
   // NOTE:
   // since we can have multiple edges, we should store edges in its own array.  each edge should have an identifier also to differentiate between other edges between same vertices 
-  
+
   state = {
     add_edge_mode:  false,
     new_edge_source: undefined,
@@ -74,13 +75,15 @@ if(localStorage.getItem('state') === "undefined") {
 
 
 var state = loadData();
- 
+
 // Model accessors
 
 // get shape from `shapes` by `id`
-function getShape(id, shapes) {}
+// function getShape(id, shapes) {}
 
+// TODO figure out why below event handler is not being called
 document.addEventListener("DOMContentLoaded", function(event) {
+  console.log("hi");
 
   // bind plain js functions
   document.querySelector(".save").addEventListener('click', function() {
@@ -108,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   }
 
-  
+
   // add edges to a shape in state.rects
   function addEdge(shape1, shape2, isDirected) {
     state.edges.push(
@@ -166,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   function createEdge(a, b) {
     // add directed edge to state
     addEdge(a, b, true);
-    
+
     // NOTE:
     // - Consider using a generalized update function 
     // - Need to insert edges before shapes to make sure shape element 
@@ -234,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // distance between center(from) and center(to)
     var out_w = center(from).x - center(padded_to).x; 
     var out_h = center(from).y - center(padded_to).y; 
-    
+
     // Calculates the distances we need to reposition away from the center of the rectangle
     if (fromDirection(from,to) === "right") {
        in_w = padded_to.width/2;
@@ -285,11 +288,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (bot_right_angle <= angle && angle < bot_left_angle) {
       return "bottom";
     }
-    
+
     if (bot_left_angle <= angle || angle < top_left_angle) {
       return "left";
     }
-    
+
     if (top_left_angle <= angle && angle < top_right_angle) {
       return "top";
     }
@@ -435,3 +438,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // TODO be able to draw directed/undirected edges between shapes
 
 });
+
+
+
+}

@@ -1,80 +1,15 @@
+import * as statehandler from './state.js';
 
 export function bootstrap() {
 // Handlers
-function populateStorage() {
-  var rects = [
-    {id:0, x: 50, y:50, width:100, height:100, highlight: false },
-    {id:1, x: 200, y:100, width:100, height:200, highlight: false},
-    {id:2, x: 350, y:50, width:100, height:100, highlight: false},
-    {id:3, x: 550, y:50, width:100, height:100, highlight: false},
-  ];
-
-  var edges = [
-  ];
-
-  // NOTE:
-  // since we can have multiple edges, we should store edges in its own array.  each edge should have an identifier also to differentiate between other edges between same vertices 
-
-  state = {
-    add_edge_mode:  false,
-    new_edge_source: undefined,
-    rects: rects,
-    edges: edges
-  };
-
-  localStorage.setItem('state', JSON.stringify(state));
-  console.log(JSON.stringify(state));
-  console.log('Populated localstorage with test state');
-
-}
-
-function saveData(state) { 
-  if(state === undefined) {
-    console.log("No 'state' parameter");
-    return;
-  }
-
-  // replace `from` and `to` (shape objects) with their respective ids
-  state.edges.forEach(function(e) {
-    e.from = e.from.id;
-    e.to = e.to.id;
-  }); 
-
-  localStorage.setItem('state', JSON.stringify(state));
-  console.log(JSON.stringify(state));
-  console.log('State saved!');
-
-  // reload shape objects to state
-  loadShapesToState(state);
-}
-
-function loadData() {
-  var state = JSON.parse(localStorage.getItem('state'));
-
-  // replace `from` and `to` (ids) with respective shape objects
-  loadShapesToState(state);
-  return state;  
-}
-
-// replace `from` and `to` (ids) with respective shape objects
-function loadShapesToState(state) {
-  state.edges.forEach(function(e) {
-    e.from = state.rects.find(function(shape) {
-      return shape.id === e.from;
-    });
-    e.to = state.rects.find(function(shape) {
-      return shape.id === e.to;
-    });
-  });
-}
 
 // load sample data if first-time user
 if(localStorage.getItem('state') === "undefined") {
-  populateStorage();
+  statehandler.populateStorage();
 } 
 
 
-var state = loadData();
+var state = statehandler.loadData();
 
 // Model accessors
 
@@ -87,7 +22,16 @@ var state = loadData();
 
   // bind plain js functions
   document.querySelector(".save").addEventListener('click', function() {
-    saveData(state);
+    statehandler.saveData(state);
+  });
+
+
+  document.querySelector(".populate-storage").addEventListener('click', function() {
+    statehandler.populateStorage();
+  });
+
+    document.querySelector(".clear-storage").addEventListener('click', function() {
+    statehandler.clearStorage();
   });
 
 
@@ -137,7 +81,7 @@ var state = loadData();
     d.highlight = !d.highlight;
 
     // save state
-    // saveData(state);
+    // statehandler.saveData(state);
   }
 
 

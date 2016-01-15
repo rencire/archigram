@@ -82,7 +82,7 @@ var state = loadData();
 // function getShape(id, shapes) {}
 
 // TODO figure out why below event handler is not being called
-document.addEventListener("DOMContentLoaded", function(event) {
+// document.addEventListener("DOMContentLoaded", function(event) {
   console.log("hi");
 
   // bind plain js functions
@@ -437,7 +437,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   // TODO be able to draw directed/undirected edges between shapes
 
-});
+// });
 
 
 

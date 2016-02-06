@@ -4,7 +4,7 @@ export function bootstrap() {
 // Handlers
 
 // load sample data if first-time user
-if(localStorage.getItem('state') === "undefined") {
+if(localStorage.getItem('state') === null) {
   statehandler.populateStorage();
 } 
 

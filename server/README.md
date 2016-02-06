@@ -2,6 +2,11 @@
 
 **TODO: Add description**
 
+Running server:
+iex -S mix
+c "lib/server.ex"
+{:ok, _} = Plug.Adapters.Cowboy.http Server, []
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:

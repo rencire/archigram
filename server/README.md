@@ -17,3 +17,9 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         def application do
           [applications: [:server]]
         end
+
+
+## Running server
+$ iex -S mix
+iex> c "lib/server.ex"
+iex> {:ok, _} = Plug.Adapters.Cowboy.http Server, []

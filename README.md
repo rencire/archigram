@@ -3,7 +3,11 @@ Archigram is a simple tool to help with drawing and visualizing diagrams.  Origi
 
 # Installation
 
-To run, just copy the static files (html/css/js) from `server/priv/static/` and put them on a web server.
+First install [JSPM](http://jspm.io/).
+Next, go to 'server/priv/static' and enter `jspm install`.
+
+Open up `index.html` to see the site.
+
 
 
 Alternatively, if you have elixir installed, just navigate to the server directory and run from iex console:
@@ -14,6 +18,7 @@ iex> c "lib/server.ex"
 iex> {:ok, _} = Plug.Adapters.Cowboy.http Server, []
 
 Now navigate to localhost:4000.
+
 
 #Project Management
 Trello board:

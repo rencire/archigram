@@ -9,12 +9,12 @@ export function populateStorage() {
 }
 
 export function clearStorage() {
-  localStorage.setItem('state', undefined);
+  localStorage.setItem('state', null);
   console.log('Cleared app data from localStorage');
 }
 
 export function saveData(state) { 
-  if(state === undefined) {
+  if(state === null) {
     console.log("No 'state' parameter");
     return;
   }

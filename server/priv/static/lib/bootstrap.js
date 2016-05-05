@@ -1,80 +1,15 @@
+import * as statehandler from './state.js';
 
 export function bootstrap() {
 // Handlers
-function populateStorage() {
-  var rects = [
-    {id:0, x: 50, y:50, width:100, height:100, highlight: false },
-    {id:1, x: 200, y:100, width:100, height:200, highlight: false},
-    {id:2, x: 350, y:50, width:100, height:100, highlight: false},
-    {id:3, x: 550, y:50, width:100, height:100, highlight: false},
-  ];
-
-  var edges = [
-  ];
-
-  // NOTE:
-  // since we can have multiple edges, we should store edges in its own array.  each edge should have an identifier also to differentiate between other edges between same vertices 
-
-  state = {
-    add_edge_mode:  false,
-    new_edge_source: undefined,
-    rects: rects,
-    edges: edges
-  };
-
-  localStorage.setItem('state', JSON.stringify(state));
-  console.log(JSON.stringify(state));
-  console.log('Populated localstorage with test state');
-
-}
-
-function saveData(state) { 
-  if(state === undefined) {
-    console.log("No 'state' parameter");
-    return;
-  }
-
-  // replace `from` and `to` (shape objects) with their respective ids
-  state.edges.forEach(function(e) {
-    e.from = e.from.id;
-    e.to = e.to.id;
-  }); 
-
-  localStorage.setItem('state', JSON.stringify(state));
-  console.log(JSON.stringify(state));
-  console.log('State saved!');
-
-  // reload shape objects to state
-  loadShapesToState(state);
-}
-
-function loadData() {
-  var state = JSON.parse(localStorage.getItem('state'));
-
-  // replace `from` and `to` (ids) with respective shape objects
-  loadShapesToState(state);
-  return state;  
-}
-
-// replace `from` and `to` (ids) with respective shape objects
-function loadShapesToState(state) {
-  state.edges.forEach(function(e) {
-    e.from = state.rects.find(function(shape) {
-      return shape.id === e.from;
-    });
-    e.to = state.rects.find(function(shape) {
-      return shape.id === e.to;
-    });
-  });
-}
 
 // load sample data if first-time user
-if(localStorage.getItem('state') === "undefined") {
-  populateStorage();
+if(localStorage.getItem('state') === null) {
+  statehandler.populateStorage();
 } 
 
 
-var state = loadData();
+var state = statehandler.loadData();
 
 // Model accessors
 
@@ -83,17 +18,27 @@ var state = loadData();
 
 // TODO figure out why below event handler is not being called
 // document.addEventListener("DOMContentLoaded", function(event) {
-  console.log("hi");
+  console.debug("loading bootstrap.js");
 
   // bind plain js functions
   document.querySelector(".save").addEventListener('click', function() {
-    saveData(state);
+    statehandler.saveData(state);
+  });
+
+
+  document.querySelector(".populate-storage").addEventListener('click', function() {
+    statehandler.populateStorage();
+  });
+
+    document.querySelector(".clear-storage").addEventListener('click', function() {
+    statehandler.clearStorage();
   });
 
 
   // d3 element handlers
   function handleShapeMousedown(d) {
-    console.log('on mousedown');
+    console.log('on mousedown shape');
+    console.log(d3.event.type, d3.event.target, d3.event );
     if(d3.event.shiftKey) {
       state.add_edge_mode = true;
       state.new_edge_source = d; 
@@ -129,7 +74,8 @@ var state = loadData();
     if (d3.event.defaultPrevented) {
       return;
     }
-    console.log('on click');
+    console.log('on click shape');
+    console.log(d3.event.type, d3.event.target, d3.event );
     // highlight node with a css class
     this.classList.toggle("highlight");
 
@@ -137,12 +83,16 @@ var state = loadData();
     d.highlight = !d.highlight;
 
     // save state
-    // saveData(state);
+    // statehandler.saveData(state);
   }
 
 
+  // Reset drag line for two cases:
+  // 1) releasing edge line with cursor on another shape
+  // 2) releasing edge line without cursor on another shape
   function handleBoardMouseup() {
-    console.log("mouseup board");
+    console.log("on mouseup board");
+    console.log(d3.event.type, d3.event.target, d3.event );
     if (state.add_edge_mode) {
       state.add_edge_mode = false;
       resetDragLine(dragline);
@@ -151,16 +101,65 @@ var state = loadData();
     }
   }
 
-  function handleShapeMouseup(target, index) {
-    console.log("mouseup shape");
-    // stop mouseup event bubbling up to svg
-    // d3.event.sourceEvent.stopPropagation();
+  function handleBoardClick() {
+    console.log('on click board');
+    console.log(d3.event.type, d3.event.target, d3.event );
 
+    // If we are dragging anything on the board, d3.event.defaultPrevented should be true for 'click' events
+    // See https://github.com/mbostock/d3/wiki/Drag-Behavior#on
+    if (d3.event.defaultPrevented) {
+      return;
+    }
+      
+    if (d3.event.target === this) {
+      // note offsetX and offsetY are experimental apis
+      createShape({x: d3.event.offsetX, y: d3.event.offsetY});
+    }
+  }
+
+  // Right now, restricted to creating rectangles
+  function createShape(origin) {
+    addShape(origin);
+
+    // Enter selection
+    svg.selectAll('rect').data(state.rects)
+      .enter().append('rect')
+      .attr("x", function(d) {return d.x;})
+      .attr("y", function(d) {return d.y;})
+      .attr("width", function(d) {return d.width;})
+      .attr("height", function(d) {return d.height;})
+      .classed("highlight", function(d) {return d.highlight;})
+      .on("click", toggleSelection)
+      .on("mousedown", handleShapeMousedown)
+      .on("mouseup", handleShapeMouseup)
+      .call(drag);
+  }
+
+  // Add shape to state
+  // TODO
+  // Add other shapes
+  // Only rects for now
+  function addShape(origin) {
+    state.rects.push(
+        {
+          id: state.rects.length,
+          x: origin.x - 50,
+          y: origin.y - 50,
+          width: 100,
+          height: 100,
+          highlight: false
+        }
+    );
+  }
+
+
+  function handleShapeMouseup(target, index) {
+    console.log("on mouseup shape");
+    console.log(d3.event.type, d3.event.target, d3.event, d3.event.sourceEvent );
 
     // If mouse is over another shape:
     //    lock coordinate to origin of other shape (later we will want to have it automatically locked to one side of the square
     if (state.add_edge_mode && target !== state.new_edge_source) {
-
       createEdge(state.new_edge_source, target);
       console.log("added edge to data, rendered new edge");
     }
@@ -356,8 +355,9 @@ var state = loadData();
   }
 
   function handleDragend(d, index) {
-    console.log("dragend");
+    console.log("on dragend");
     console.log(d);
+    console.log(d3.event.type, d3.event.target, d3.event );
     // d is the object we started drag event with (dragstart)
   }
 
@@ -369,11 +369,13 @@ var state = loadData();
 
 
 
+
   /*
    *  Load initial shapes
    */ 
   var svg = d3.select('svg')
-    .on('mouseup', handleBoardMouseup);
+    .on('mouseup', handleBoardMouseup)
+    .on('click', handleBoardClick);
 
   // add arrow markers
   // define arrow markers for graph links

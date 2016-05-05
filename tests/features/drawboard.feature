@@ -32,7 +32,7 @@ Feature: Drawboard
 
 
 
-  Scenario: Add new rects to the board
+
   Scenario: Remove rects from the board
   Scenario: Space out multiple edges between two rects so that they don't overlap
   Scenario: User labeled rects

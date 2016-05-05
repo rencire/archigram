@@ -87,6 +87,9 @@ var state = statehandler.loadData();
   }
 
 
+  // Reset drag line for two cases:
+  // 1) releasing edge line with cursor on another shape
+  // 2) releasing edge line without cursor on another shape
   function handleBoardMouseup() {
     console.log("on mouseup board");
     console.log(d3.event.type, d3.event.target, d3.event );
@@ -101,6 +104,12 @@ var state = statehandler.loadData();
   function handleBoardClick() {
     console.log('on click board');
     console.log(d3.event.type, d3.event.target, d3.event );
+
+    // If we are dragging anything on the board, d3.event.defaultPrevented should be true for 'click' events
+    // See https://github.com/mbostock/d3/wiki/Drag-Behavior#on
+    if (d3.event.defaultPrevented) {
+      return;
+    }
       
     if (d3.event.target === this) {
       // note offsetX and offsetY are experimental apis
@@ -146,10 +155,7 @@ var state = statehandler.loadData();
 
   function handleShapeMouseup(target, index) {
     console.log("on mouseup shape");
-    console.log(d3.event.type, d3.event.target, d3.event );
-    // stop mouseup event bubbling up to svg
-    // d3.event.sourceEvent.stopPropagation();
-
+    console.log(d3.event.type, d3.event.target, d3.event, d3.event.sourceEvent );
 
     // If mouse is over another shape:
     //    lock coordinate to origin of other shape (later we will want to have it automatically locked to one side of the square

@@ -49,15 +49,26 @@ function seedData() {
     {id:3, x: 550, y:50, width:100, height:100, highlight: false},
   ];
 
+  var edges = [
+    {
+        id: 0,
+        from: 0,
+        to: 1,
+        directed: true
+    }
+  ];
 
   // NOTE:
   // since we can have multiple edges, we should store edges in its own array.  each edge should have an identifier also to differentiate between other edges between same vertices 
+
+  var rect_cnt = rects.length;
 
   var state = {
     add_edge_mode:  false,
     new_edge_source: undefined,
     rects: rects,
-    edges: []
+    edges: edges,
+    rect_cnt: rect_cnt
   };
   return state;
 }

@@ -30,8 +30,12 @@ var state = statehandler.loadData();
     statehandler.populateStorage();
   });
 
-    document.querySelector(".clear-storage").addEventListener('click', function() {
+  document.querySelector(".clear-storage").addEventListener('click', function() {
     statehandler.clearStorage();
+  });
+
+  document.querySelector(".rm-sel-shapes").addEventListener('click', function() {
+    rmSelShapes();
   });
 
 
@@ -68,7 +72,52 @@ var state = statehandler.loadData();
         }
     );
   }   
+  
+  // Add shape to state
+  // TODO
+  // Add other shapes
+  // Only rects for now
+  function addShape(origin) {
+    state.rects.push(
+        {
+          id: state.rect_cnt,
+          x: origin.x - 50,
+          y: origin.y - 50,
+          width: 100,
+          height: 100,
+          highlight: false
+        }
+    );
 
+    state.rect_cnt = state.rect_cnt + 1;
+
+  }
+  
+  // TODO
+  function delSelShapes() {
+    var sel_rects = state.rects.filter(function(rect) {
+      return rect.highlight;
+    });
+    var sel_rect_ids = sel_rects.map(function(rect) {
+      return rect.id;
+    });  
+
+
+    // O(n^2)? depends on implementation of `indexOf`
+    // Keep edge if both `from` and `to` do not refer to selected rects.
+    state.edges = state.edges.filter(function(edge) {
+      var from_idx = sel_rect_ids.indexOf(edge.from);
+      var to_idx = sel_rect_ids.indexOf(edge.to);
+
+      return (from_idx === -1) && ( to_idx === -1);
+    });
+
+    // remove selected rects
+    state.rects = state.rects.filter(function(rect) {
+      return !rect.highlight;
+    });
+    
+  }
 
   function toggleSelection(d, i){
     if (d3.event.defaultPrevented) {
@@ -135,23 +184,22 @@ var state = statehandler.loadData();
       .call(drag);
   }
 
-  // Add shape to state
-  // TODO
-  // Add other shapes
-  // Only rects for now
-  function addShape(origin) {
-    state.rects.push(
-        {
-          id: state.rects.length,
-          x: origin.x - 50,
-          y: origin.y - 50,
-          width: 100,
-          height: 100,
-          highlight: false
-        }
-    );
-  }
 
+  // TODO 
+  // check why removing wrong shape.  maybe data binding is incorrect?
+  function rmSelShapes() {
+    // remove selected shape and its neighboring edges from Model
+    delSelShapes();
+
+    // re-render shapes and edges
+    // Exit selection 
+    // TODO find out why not rendering
+    svg.selectAll('rect').data(state.rects)
+      .exit().remove();    
+    
+    svg.selectAll('path.edge').data(state.edges)
+      .exit().remove();
+  }
 
   function handleShapeMouseup(target, index) {
     console.log("on mouseup shape");
@@ -365,7 +413,6 @@ var state = statehandler.loadData();
     .on("drag", handleDragmove)
     .on("dragend", handleDragend)
     .origin(function(d) {return d;});
-
 
 
 

@@ -93,7 +93,6 @@ var state = statehandler.loadData();
 
   }
   
-  // TODO
   function delSelShapes() {
     var sel_rects = state.rects.filter(function(rect) {
       return rect.highlight;
@@ -102,6 +101,8 @@ var state = statehandler.loadData();
       return rect.id;
     });  
 
+    // TODO
+    // figure out why edges not being removed
 
     // O(n^2)? depends on implementation of `indexOf`
     // Keep edge if both `from` and `to` do not refer to selected rects.
@@ -131,6 +132,7 @@ var state = statehandler.loadData();
     // set view highlight
     d.highlight = !d.highlight;
 
+    console.log(d);
     // save state
     // statehandler.saveData(state);
   }
@@ -171,7 +173,7 @@ var state = statehandler.loadData();
     addShape(origin);
 
     // Enter selection
-    svg.selectAll('rect').data(state.rects)
+    svg.selectAll('rect').data(state.rects, function(d) {return d.id;})
       .enter().append('rect')
       .attr("x", function(d) {return d.x;})
       .attr("y", function(d) {return d.y;})
@@ -185,19 +187,18 @@ var state = statehandler.loadData();
   }
 
 
-  // TODO 
-  // check why removing wrong shape.  maybe data binding is incorrect?
   function rmSelShapes() {
     // remove selected shape and its neighboring edges from Model
     delSelShapes();
 
     // re-render shapes and edges
     // Exit selection 
-    // TODO find out why not rendering
-    svg.selectAll('rect').data(state.rects)
+    svg.selectAll('rect').data(state.rects, function(d) {return d.id;})
       .exit().remove();    
     
-    svg.selectAll('path.edge').data(state.edges)
+  // TODO 
+  // check why edges not being removed
+    svg.selectAll('path.edge').data(state.edges, function(d) {return d.id;})
       .exit().remove();
   }
 
@@ -455,7 +456,7 @@ var state = statehandler.loadData();
   // draw edges
   // Note: need to draw edges before shapes
   var sel_edge = svg.selectAll('path.edge')
-    .data(state.edges)
+    .data(state.edges, function(d) {return d.id;})
     .enter()
     .append('path')
     .classed('edge', true)
@@ -471,7 +472,7 @@ var state = statehandler.loadData();
 
   // draw shapes (currently rects)
   var sel_rect = svg.selectAll("rect")
-    .data(state.rects)
+    .data(state.rects, function(d) {return d.id;})
       .enter().append("rect")
       .attr("x", function(d) {return d.x;})
       .attr("y", function(d) {return d.y;})

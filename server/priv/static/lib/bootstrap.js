@@ -101,14 +101,11 @@ var state = statehandler.loadData();
       return rect.id;
     });  
 
-    // TODO
-    // figure out why edges not being removed
-
     // O(n^2)? depends on implementation of `indexOf`
     // Keep edge if both `from` and `to` do not refer to selected rects.
     state.edges = state.edges.filter(function(edge) {
-      var from_idx = sel_rect_ids.indexOf(edge.from);
-      var to_idx = sel_rect_ids.indexOf(edge.to);
+      var from_idx = sel_rect_ids.indexOf(edge.from.id);
+      var to_idx = sel_rect_ids.indexOf(edge.to.id);
 
       return (from_idx === -1) && ( to_idx === -1);
     });

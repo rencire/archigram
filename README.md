@@ -1,17 +1,19 @@
 # Archigram
 Archigram is a simple tool to help with drawing and visualizing diagrams.  Original purpose is to help with drawing software architecture diagrams.
 
-# Installation
 
 All frontend code is in 'client'. Currently using:
-- d3
-- Webpack
-- Babel 
+- [d3](https://d3js.org/) for binding data to elements. 
+- [Webpack](https://webpack.github.io/) for managing modules.
+- [Babel](https://babeljs.io/) for ES6 transpilation
 
+# Installation
 
-`cd client`
-`npm install`
-`npm run start`
+```
+cd client
+npm install
+npm run start
+```
 
 
 References:

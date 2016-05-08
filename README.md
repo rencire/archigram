@@ -3,10 +3,16 @@ Archigram is a simple tool to help with drawing and visualizing diagrams.  Origi
 
 # Installation
 
-First install [JSPM](http://jspm.io/).
-Next, go to 'server/priv/static' and enter `jspm install`.
+All frontend code is in 'server/priv/static'
 
-Open up `index.html` to see the site.
+Open up `server/priv/static/index.html` to see the site.
+
+References:
+https://leanpub.com/setting-up-es6/read#sec_webpack-babel
+https://www.bensmithett.com/smarter-css-builds-with-webpack/
+
+http://www.syntaxsuccess.com/viewarticle/5532c5c0873cb5f0449ffcc5
+      
 
 
 

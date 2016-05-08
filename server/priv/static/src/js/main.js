@@ -1,6 +1,21 @@
+import 'babel-polyfill';
+
+
+import 'stylesheets/main';
+
+// TODO 
+// once mbostock finishes d3-drag and d3-selection, change 'd3' to the respective libraries
+//
+// import d3_sel from 'd3-selection';
+
+import d3_sel from 'd3';
+var d3_drag = d3_sel;
+
+
 import * as statehandler from './state.js';
 
-export function bootstrap() {
+
+
 // Handlers
 
 // load sample data if first-time user
@@ -42,8 +57,8 @@ var state = statehandler.loadData();
   // d3 element handlers
   function handleShapeMousedown(d) {
     console.log('on mousedown shape');
-    console.log(d3.event.type, d3.event.target, d3.event );
-    if(d3.event.shiftKey) {
+    console.log(d3_sel.event.type, d3_sel.event.target, d3_sel.event );
+    if(d3_sel.event.shiftKey) {
       state.add_edge_mode = true;
       state.new_edge_source = d; 
 
@@ -118,11 +133,11 @@ var state = statehandler.loadData();
   }
 
   function toggleSelection(d, i){
-    if (d3.event.defaultPrevented) {
+    if (d3_sel.event.defaultPrevented) {
       return;
     }
     console.log('on click shape');
-    console.log(d3.event.type, d3.event.target, d3.event );
+    console.log(d3_sel.event.type, d3_sel.event.target, d3_sel.event );
     // highlight node with a css class
     this.classList.toggle("highlight");
 
@@ -140,7 +155,7 @@ var state = statehandler.loadData();
   // 2) releasing edge line without cursor on another shape
   function handleBoardMouseup() {
     console.log("on mouseup board");
-    console.log(d3.event.type, d3.event.target, d3.event );
+    console.log(d3_sel.event.type, d3_sel.event.target, d3_sel.event );
     if (state.add_edge_mode) {
       state.add_edge_mode = false;
       resetDragLine(dragline);
@@ -151,17 +166,17 @@ var state = statehandler.loadData();
 
   function handleBoardClick() {
     console.log('on click board');
-    console.log(d3.event.type, d3.event.target, d3.event );
+    console.log(d3_sel.event.type, d3_sel.event.target, d3_sel.event );
 
-    // If we are dragging anything on the board, d3.event.defaultPrevented should be true for 'click' events
+    // If we are dragging anything on the board, d3_sel.event.defaultPrevented should be true for 'click' events
     // See https://github.com/mbostock/d3/wiki/Drag-Behavior#on
-    if (d3.event.defaultPrevented) {
+    if (d3_sel.event.defaultPrevented) {
       return;
     }
       
-    if (d3.event.target === this) {
+    if (d3_sel.event.target === this) {
       // note offsetX and offsetY are experimental apis
-      createShape({x: d3.event.offsetX, y: d3.event.offsetY});
+      createShape({x: d3_sel.event.offsetX, y: d3_sel.event.offsetY});
     }
   }
 
@@ -201,7 +216,7 @@ var state = statehandler.loadData();
 
   function handleShapeMouseup(target, index) {
     console.log("on mouseup shape");
-    console.log(d3.event.type, d3.event.target, d3.event, d3.event.sourceEvent );
+    console.log(d3_sel.event.type, d3_sel.event.target, d3_sel.event, d3_sel.event.sourceEvent );
 
     // If mouse is over another shape:
     //    lock coordinate to origin of other shape (later we will want to have it automatically locked to one side of the square
@@ -374,14 +389,14 @@ var state = statehandler.loadData();
         var center_y = (shape_datum.y + shape_datum.height/2);
         dragline.attr('d', 
             'M' + center_x + ',' + center_y +
-            'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1]
+            'L' + d3_sel.mouse(this)[0] + ',' + d3_sel.mouse(this)[1]
         );
      } else {
      // We are dragging the shape itself
-        d3.event.sourceEvent.stopPropagation();
-        d3.select(this)
-          .attr('x', d3.event.x)
-          .attr('y', d3.event.y); 
+        d3_sel.event.sourceEvent.stopPropagation();
+        d3_sel.select(this)
+          .attr('x', d3_sel.event.x)
+          .attr('y', d3_sel.event.y); 
 
         svg.selectAll('path.edge')
           .filter(function(edge_datum) {
@@ -391,8 +406,8 @@ var state = statehandler.loadData();
 
 
         // TODO consider passing in state as a parameter. State right now is a global var...
-        shape_datum.x = d3.event.x; 
-        shape_datum.y = d3.event.y; 
+        shape_datum.x = d3_sel.event.x; 
+        shape_datum.y = d3_sel.event.y; 
 
         // TODO consider saving state to localstorage on dragend?
         // or maybe even while dragging?
@@ -403,7 +418,7 @@ var state = statehandler.loadData();
   function handleDragend(d, index) {
     console.log("on dragend");
     console.log(d);
-    console.log(d3.event.type, d3.event.target, d3.event );
+    console.log(d3_sel.event.type, d3_sel.event.target, d3_sel.event );
     // d is the object we started drag event with (dragstart)
   }
 
@@ -418,7 +433,7 @@ var state = statehandler.loadData();
   /*
    *  Load initial shapes
    */ 
-  var svg = d3.select('svg')
+  var svg = d3_sel.select('svg')
     .on('mouseup', handleBoardMouseup)
     .on('click', handleBoardClick);
 
@@ -488,4 +503,3 @@ var state = statehandler.loadData();
 
 
 
-}

@@ -10,7 +10,6 @@ var dir_styles = path.resolve(__dirname, 'src/stylesheets');
 var dir_html = path.resolve(__dirname, 'src/html');
 var dir_build = path.resolve(__dirname, 'build');
 
-// How does webpack allow js to import css files without specifiying path?
 module.exports = {
     entry: path.join(dir_js, 'main.js'),
     output: {

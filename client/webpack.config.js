@@ -23,6 +23,7 @@ module.exports = {
         loaders: [
             {
                 loader: 'babel-loader',
+                exclude: /(node_modules)/,
                 test: dir_js,
             },
             {
@@ -44,10 +45,11 @@ module.exports = {
         colors: true
     },
     // Create Sourcemaps for the bundle
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
 
     resolve: {
         extensions: ['', '.js', '.css'],
         root: [path.join(__dirname, './src')]
-    }
+    },
+
 };

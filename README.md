@@ -10,15 +10,14 @@ https://trello.com/b/eUE5jIHf/archigram#
 # Installation
 All frontend code is in 'client'. Core libraries:
 - [d3](https://d3js.org/) for binding data to elements. 
-
 - [Webpack](https://webpack.github.io/) for managing modules.
 - [Babel](https://babeljs.io/) for ES6 transpilation
 - [Karma](https://github.com/karma-runner/karma) for test runner.
 - [Jasmine](http://jasmine.github.io/) for bdd/unit tests.
-
 - ...and a bunch of plugins for integrating them :). Check the package.json for details.  
 
 
+To install and run:
 ```
 cd client
 npm install

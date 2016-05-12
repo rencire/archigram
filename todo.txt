@@ -1,4 +1,0 @@
-[ ] refactor  - package related functions together as a module
-[ ] tests     - write automated ui tests for existing functionality
-[ ] refactor  - consider not using a global var for `state`
-[ ] feature   - space out edges if more than one edge between same shapes

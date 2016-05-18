@@ -30,6 +30,7 @@ npm run start
 - https://www.bensmithett.com/smarter-css-builds-with-webpack/
 - http://www.syntaxsuccess.com/viewarticle/5532c5c0873cb5f0449ffcc5
 - https://medium.com/@grrowl/testing-react-with-jasmine-and-karma-using-webpack-and-babel-18fc268f066a#.7fpog9kzr
+- https://www.paypal-engineering.com/2015/08/07/1450/
 
 
 

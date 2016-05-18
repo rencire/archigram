@@ -1,7 +1,8 @@
 import 'babel-polyfill';
 
-
 import 'stylesheets/main';
+
+import 'backbone';
 
 // TODO 
 // once mbostock finishes d3-drag and d3-selection, change 'd3' to the respective libraries

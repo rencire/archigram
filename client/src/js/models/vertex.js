@@ -9,7 +9,7 @@ var Vertex = Backbone.Model.extend({
   //
   // Collection must assign correct id to Vertex (collection.length)
   defaults: {
-    id: undefined,
+    id: null,
     label: '',
     x: 0,
     y: 0,

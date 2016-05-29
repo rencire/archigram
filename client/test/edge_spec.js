@@ -1,22 +1,50 @@
 
-import Edge from '../src.js/models/edge.js';
+import Edge from '../src/js/models/edge.js';
 
-describe('Validations', function() {
+
+describe('Default attributes', function() {
+  var e;
 
   beforeEach(function() {
-    var errorCallback = jasmine.createSpy('-invalid event callback-');
-    var e = new Edge(); 
-    vert.on('invalid', errorCallback);
+    e = new Edge(); 
+  });
+
+
+  it('can be created with default attributes', function() {
+    expect(e.get('label')).toBe('');
   });
 
   it('`from` and `to` ids must exist', function() {
-    vert.set({from: 2, to: 2}, {validate: true});
-    expect(errorCallback.calls.mostRecent().args[1]).toBe('`from` and `to` vertex ids must exist');
+    expect(e.get('from')).toBeDefined();
+    expect(e.get('to')).toBeDefined();
+  });
+
+});
+
+
+
+describe('Validations', function() {
+  var e;
+  var errorCallback;
+
+  beforeEach(function() {
+    errorCallback = jasmine.createSpy('-invalid event callback-');
+    e = new Edge(); 
+    e.on('invalid', errorCallback);
+  });
+
+  it('`from` and `to` ids must be numbers', function() {
+    e.set({from: '1', to: 2}, {validate: true});
+    expect(errorCallback.calls.mostRecent().args[1]).toBe('`from` must be a Number');
+
+    e.set({from: 1, to: '2'}, {validate: true});
+    expect(errorCallback.calls.mostRecent().args[1]).toBe('`to` must be a Number');
+
   });
 
     // should check when creating new edge object as well
   it('`from` and `to` ids cannot be the same', function() {
-    vert.set({from: 2, to: 2}, {validate: true});
+    e.set({from: 2, to: 2}, {validate: true});
 
     expect(errorCallback.calls.mostRecent().args[1]).toBe('`from` and `to` vertex ids cannot be the same');
       
@@ -27,12 +55,3 @@ describe('Validations', function() {
 
 
 
-
-describe('Default attributes', function() {
-
-  it('can be created with default attributes', function() {
-    var e = new Edge();
-    expect(e.get('label')).toBe('');
-  });
-
-});

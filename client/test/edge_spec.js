@@ -1,4 +1,3 @@
-
 import Edge from '../src/js/models/edge.js';
 
 
@@ -8,7 +7,6 @@ describe('Default attributes', function() {
   beforeEach(function() {
     e = new Edge(); 
   });
-
 
   it('can be created with default attributes', function() {
     expect(e.get('label')).toBe('');

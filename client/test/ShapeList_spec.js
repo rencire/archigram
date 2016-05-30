@@ -8,5 +8,15 @@ describe('ShapeList tests', function() {
     shapes.add({label: 'I am a rect'});
     expect(shapes.length).toBe(1);
   });
+  
+  it('correctly filters out the selected shapes', function() {
+    var shapes = new ShapeList();
+    shapes.add({highlight: true});
+    shapes.add({highlight: true});
+    shapes.add({highlight: false});
+
+    expect(shapes.selected().length).toBe(2);
+
+  });
 
 });

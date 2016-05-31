@@ -28,3 +28,19 @@ describe('Rect validation tests', function() {
     expect(errorCallback.calls.mostRecent().args[1]).toBe('Height must be >= 0');
   });
 });
+
+describe('Rect default attributes', function() {
+  it('can be created with default attributes from Vertex', () => {
+    var r = new Rect();
+    expect(r.get('label')).toBe('');
+    expect(r.get('x')).toBe(0);
+    expect(r.get('y')).toBe(0);
+    expect(r.get('highlight')).toBe(false);
+  });
+
+  it('can be created with default attributes specific to Rect', () => {
+    var r = new Rect();
+    expect(r.get('width')).toBe(50);
+    expect(r.get('height')).toBe(50);
+  });
+});

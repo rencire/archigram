@@ -28,6 +28,7 @@ npm run start
 ## References:
 
 ### Webpack
+- https://webpack.github.io/
 - https://leanpub.com/setting-up-es6/read#sec_webpack-babel
 - https://www.bensmithett.com/smarter-css-builds-with-webpack/
 - http://www.syntaxsuccess.com/viewarticle/5532c5c0873cb5f0449ffcc5

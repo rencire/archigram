@@ -9,8 +9,8 @@ describe('Vertex Model', () => {
   it('can be created with default attributes', () => {
     var v = new Vertex();
     expect(v.get('label')).toBe('');
-    expect(v.get('x')).toBe(0);
-    expect(v.get('y')).toBe(0);
+    expect(v.get('x')).toBe(100);
+    expect(v.get('y')).toBe(100);
     expect(v.get('highlight')).toBe(false);
   });
 

@@ -4,6 +4,10 @@ import 'stylesheets/main';
 
 import 'backbone';
 
+import BoardView from './views/boardView.js';
+
+new BoardView(); 
+
 // TODO 
 // once mbostock finishes d3-drag and d3-selection, change 'd3' to the respective libraries
 //
@@ -434,7 +438,7 @@ var state = statehandler.loadData();
   /*
    *  Load initial shapes
    */ 
-  var svg = d3_sel.select('svg')
+  var svg = d3_sel.select('#oldboard')
     .on('mouseup', handleBoardMouseup)
     .on('click', handleBoardClick);
 

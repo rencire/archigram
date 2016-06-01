@@ -4,8 +4,8 @@ import _ from 'underscore';
 var vertexProtoDefaults = {
   id: null,
   label: '',
-  x: 0,
-  y: 0,
+  x: 100,
+  y: 100,
   highlight: false
 };
 

@@ -11,7 +11,10 @@ var dir_html = path.resolve(__dirname, 'src/html');
 var dir_build = path.resolve(__dirname, 'build');
 
 module.exports = {
-    entry: path.join(dir_js, 'main.js'),
+    entry: [
+        path.join(dir_js, 'main.js'),
+        // path.join(dir_js, 'views/boardView.js'),
+    ],
     output: {
         path: dir_build,
         filename: 'bundle.js'
@@ -49,6 +52,7 @@ module.exports = {
 
     resolve: {
         extensions: ['', '.js', '.css'],
+        // modulesDirectories: ['node_modules'],
         root: [path.join(__dirname, './src')]
     },
 

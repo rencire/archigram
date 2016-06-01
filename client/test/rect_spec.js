@@ -33,8 +33,8 @@ describe('Rect default attributes', function() {
   it('can be created with default attributes from Vertex', () => {
     var r = new Rect();
     expect(r.get('label')).toBe('');
-    expect(r.get('x')).toBe(0);
-    expect(r.get('y')).toBe(0);
+    expect(r.get('x')).toBe(100);
+    expect(r.get('y')).toBe(100);
     expect(r.get('highlight')).toBe(false);
   });
 

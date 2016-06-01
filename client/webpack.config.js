@@ -41,7 +41,14 @@ module.exports = {
             { from: dir_html } // to: output.path
         ]),
         // Avoid publishing files when compilation fails
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+
+        // new webpack.ProvidePlugin({
+        //   "$":"jquery",
+        //   "jQuery":"jquery",
+        //   "window.jQuery":"jquery"
+        // }),
+
     ],
     stats: {
         // Nice colored output
@@ -53,7 +60,13 @@ module.exports = {
     resolve: {
         extensions: ['', '.js', '.css'],
         // modulesDirectories: ['node_modules'],
-        root: [path.join(__dirname, './src')]
-    },
+        root: [path.join(__dirname, './src')],
+        alias: {
+          // bind version of jquery-ui
+          "jquery-ui": "jquery-ui/jquery-ui.js",      
+          // bind to modules;
+          modules: path.join(__dirname, "node_modules"),
+        }
+    }
 
 };

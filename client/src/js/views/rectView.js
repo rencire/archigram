@@ -1,9 +1,11 @@
 import Backbone from 'backbone';
 
 var rectView = Backbone.View.extend({
+
   initialize: function() {
     var namespace = 'http://www.w3.org/2000/svg';
     var rect = document.createElementNS(namespace, 'rect');
+
     this.setElement(rect); 
   },
 
@@ -14,7 +16,10 @@ var rectView = Backbone.View.extend({
       .attr('width', this.model.attributes.width)
       .attr('height', this.model.attributes.height);
     return this;
-  }
+  },
+
+  
+
 });
 
 export default rectView;

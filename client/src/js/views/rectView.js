@@ -11,11 +11,13 @@ var rectView = Backbone.View.extend({
     var namespace = 'http://www.w3.org/2000/svg';
     var rect = document.createElementNS(namespace, 'rect');
 
+    this.model.on('change', this.render, this);
     // bind drag event handlers
     // Not very 'backbone-ish' to bind events here, but quick and easy to get drag behavior up and running
+    
     $(rect).draggable({
       start: this.onDragStart,
-      drag: this.onDrag,
+      drag: this.onDrag.bind(this),
       stop: this.onDragStop
     });
 
@@ -33,21 +35,22 @@ var rectView = Backbone.View.extend({
 
   onDragStart: function(e) {
     console.log('drag start');
-    console.log(e);
+    // console.log(e);
   },
   
   // http://stackoverflow.com/questions/1108480/svg-draggable-using-jquery-and-jquery-svg#6166850
   onDrag: function(e, ui) {
-    // console.log('drag');
-    console.log(e);
+    // console.log(e);
     // Note: `this` will refer to the element itself, not the model
-    this.setAttribute('x', ui.position.left);
-
-    // TODO figure out why position is still off.  for now, quick fix to subtract 25 for y value
-    this.setAttribute('y', ui.position.top-25);
-
+    this.model.set({
+      x: ui.position.left,
+      // TODO figure out why position is still off.  for now, quick fix to subtract 25 for y value
+      y: ui.position.top-25
+    });
   },
 
+
+  // TODO this does not fire.  Is it because it conflicts with some 'click' event handler?
   onDragEnd: function(e) {
     console.log('drag end');
     console.log(e);

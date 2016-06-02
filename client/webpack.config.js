@@ -26,7 +26,7 @@ module.exports = {
         loaders: [
             {
                 loader: 'babel-loader',
-                exclude: /(node_modules)/,
+                // exclude: /(node_modules)/,
                 test: dir_js,
             },
             {
@@ -61,12 +61,12 @@ module.exports = {
         extensions: ['', '.js', '.css'],
         // modulesDirectories: ['node_modules'],
         root: [path.join(__dirname, './src')],
-        alias: {
-          // bind version of jquery-ui
-          "jquery-ui": "jquery-ui/jquery-ui.js",      
-          // bind to modules;
-          modules: path.join(__dirname, "node_modules"),
-        }
+        // alias: {
+        //   // bind version of jquery-ui
+        //   "jquery-ui": "jquery-ui/jquery-ui.js",      
+        //   // bind to modules;
+        //   modules: path.join(__dirname, "node_modules"),
+        // }
     }
 
 };

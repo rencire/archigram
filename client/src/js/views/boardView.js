@@ -1,9 +1,7 @@
 import Backbone from 'backbone';
 import ShapeList from '../collections/shapes.js';
 import RectView from './rectView.js';
-// import $ from 'jquery';
-import jQuery from 'jquery';
-import 'jquery-ui';
+
 
 var BoardView = Backbone.View.extend({
 

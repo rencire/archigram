@@ -34,7 +34,15 @@ var BoardView = Backbone.View.extend({
   },
 
   createShape: function(e) {
-    this.shapeCollection.add({});
+
+    // Right now, only creating Rects
+    // TODO figure out difference between clientX/screenX/offsetX
+    // TODO hardcoding width/2 right now.  How do we avoid this? Do we need a special initialize function
+    // in Rect.js?
+    var model = this.shapeCollection.add({
+      x: e.offsetX - 25,
+      y: e.offsetY - 25,
+    });
   },
 
   test: function(e) {

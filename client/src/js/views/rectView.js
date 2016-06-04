@@ -50,10 +50,12 @@ var rectView = Backbone.View.extend({
   },
 
 
-  // TODO this does not fire.  Is it because it conflicts with some 'click' event handler?
-  onDragEnd: function(e) {
+  onDragStop: function(e) {
     console.log('drag end');
     console.log(e);
+    // Stop event from propogating up to parent svg. Else, parent svg will handle event and unintentionally create a new rect shape on the board.
+    
+    e.stopPropagation();
   }
 
 });

@@ -40,7 +40,7 @@ describe('Rect default attributes', function() {
 
   it('can be created with default attributes specific to Rect', () => {
     var r = new Rect();
-    expect(r.get('width')).toBe(50);
-    expect(r.get('height')).toBe(50);
+    expect(r.get('width')).toBe(100);
+    expect(r.get('height')).toBe(100);
   });
 });

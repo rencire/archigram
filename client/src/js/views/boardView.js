@@ -1,6 +1,7 @@
 import Backbone from 'backbone';
 import ShapeList from '../collections/shapes.js';
 import RectView from './rectView.js';
+import {rectProtoDefaults} from '../models/protos.js';
 
 
 var BoardView = Backbone.View.extend({
@@ -27,27 +28,22 @@ var BoardView = Backbone.View.extend({
   },
 
   renderShape: function(model) {
-    console.log('rendered');
-    console.log(model);
+    // console.log('rendered');
+    // console.log(model);
     var rectView = new RectView({model: model});   
     this.$el.append(rectView.render().el);
   },
 
   createShape: function(e) {
 
-    // Right now, only creating Rects
     // TODO figure out difference between clientX/screenX/offsetX
-    // TODO hardcoding width/2 right now.  How do we avoid this? Do we need a special initialize function
     // in Rect.js?
     var model = this.shapeCollection.add({
-      x: e.offsetX - 25,
-      y: e.offsetY - 25,
+      x: e.offsetX - rectProtoDefaults.width / 2,
+      y: e.offsetY - rectProtoDefaults.height / 2
     });
   },
 
-  test: function(e) {
-    console.log(e);
-  },
 
 
 });

@@ -26,9 +26,10 @@ describe('Tests for RectView', function() {
     // console.log(this.rectView.model);
     // console.log(Object.getPrototypeOf(this.rectView.model));
     // console.log(Object.getPrototypeOf(Object.getPrototypeOf(this.rectView.model)));
+     // console.log(this.rectView.model);
     expect(this.rectView.model.get('label')).toBe('');
-    expect(this.rectView.model.get('width')).toBe(50);
-    expect(this.rectView.model.get('height')).toBe(50);
+    expect(this.rectView.model.get('width')).toBe(100);
+    expect(this.rectView.model.get('height')).toBe(100);
   });
 
 });
@@ -55,7 +56,7 @@ describe('RectView', function() {
     xit('produces the correct HTML', function() {
       this.view.render();
 
-      console.log(this.view.el);
+      // console.log(this.view.el);
       expect(this.view.el.outerHTML).toContain('x=20');
       expect(this.view.el.outerHTML).toContain('y=20');
       expect(this.view.el.outerHTML).toContain('width=30');

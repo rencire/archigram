@@ -33,10 +33,10 @@ export var vertexProto = {
 
 
 
-var rectProtoDefaults = _.extendOwn(
+export var rectProtoDefaults = _.extendOwn(
   {
-    width: 50,
-    height: 50
+    width: 100,
+    height: 100
   }, 
   vertexProtoDefaults
 );
@@ -62,6 +62,6 @@ export var rectProto = {
     if (attrs.hasOwnProperty('height') && attrs.height < 0) {
       return 'Height must be >= 0'; 
     }
-
-  }
+  },
+  
 };

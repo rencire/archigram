@@ -47,12 +47,12 @@ describe('Tests for BoardView', function() {
     // console.log(document.body.innerHTML());
     var rect = document.querySelector('rect');
 
-    var origin_x = ev.offsetX - rect.getAttribute('width') / 2; 
-    var origin_y = ev.offsetY - rect.getAttribute('height') / 2; 
+    var origin_x = ev.offsetX; 
+    var origin_y = ev.offsetY; 
     // console.log(origin_x);
     // console.log(origin_x);
     
-    expect(parseInt(rect.getAttribute('x'))).toBe(origin_x);
-    expect(parseInt(rect.getAttribute('y'))).toBe(origin_y);
+    expect(parseInt(rect.getAttribute('x'))).toBe(origin_x - rect.getAttribute('width') / 2);
+    expect(parseInt(rect.getAttribute('y'))).toBe(origin_y - rect.getAttribute('height') / 2); 
   });
 });

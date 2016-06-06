@@ -60,13 +60,11 @@ var rectView = Backbone.View.extend({
   },
   
   // http://stackoverflow.com/questions/1108480/svg-draggable-using-jquery-and-jquery-svg#6166850
-  handleDrag: function(x, i) {
-    console.log('drag');
-    console.log(x);
-    console.log(i);
-    console.log(d3_selection.event);
-    console.log(this);
-    console.log(this.model);
+  handleDrag: function() {
+    // console.log('drag');
+    // console.log(d3_selection.event);
+    // console.log(this);
+    // console.log(this.model);
     this.model.set({
       x: d3_selection.event.x,
       y: d3_selection.event.y

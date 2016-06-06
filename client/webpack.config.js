@@ -43,11 +43,9 @@ module.exports = {
         // Avoid publishing files when compilation fails
         new webpack.NoErrorsPlugin(),
 
-        // new webpack.ProvidePlugin({
-        //   "$":"jquery",
-        //   "jQuery":"jquery",
-        //   "window.jQuery":"jquery"
-        // }),
+        new webpack.ProvidePlugin({
+          // "d3":"d3"
+        }),
 
     ],
     stats: {

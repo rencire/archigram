@@ -39,8 +39,8 @@ var BoardView = Backbone.View.extend({
     // TODO figure out difference between clientX/screenX/offsetX
     // in Rect.js?
     var model = this.shapeCollection.add({
-      x: e.offsetX - rectProtoDefaults.width / 2,
-      y: e.offsetY - rectProtoDefaults.height / 2
+      x: e.offsetX,
+      y: e.offsetY
     });
   },
 

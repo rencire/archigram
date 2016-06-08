@@ -1,12 +1,9 @@
 import Backbone from 'backbone';
 
 import d3_drag from 'd3-drag';
-import d3_selection from 'd3-drag/node_modules/d3-selection';
+import d3_selection from 'd3-selection';
 
-// import d3_drag from 'd3-drag';
-// import d3_selection from 'd3-selection';
-//
-// TODO figure out why we need to require these libraries
+// TODO figure out why we need to `require` these libraries
 // Doesn't webpack handle es6 import? Maybe it can't handle jquery-ui format?
 var $ = require('jquery');
 require('jquery-ui/ui/widgets/draggable.js');
@@ -84,10 +81,6 @@ var rectView = Backbone.View.extend({
 
   handleDragEnd: function(e) {
     console.log('drag end');
-    console.log(e);
-    // Stop event from propogating up to parent svg. Else, parent svg will handle event and unintentionally create a new rect shape on the board.
-    
-    e.stopPropagation();
   }
 
 });

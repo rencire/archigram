@@ -10,6 +10,11 @@ describe('Tests for BoardView', function() {
     this.boardView = new BoardView();
   });
 
+  afterEach(function() {
+    document.querySelector('rect').remove();
+    this.svg.remove();
+  });
+
   it('Should create a new Rect with origin coordinates at mouse position click', function() {
     // Below does not work since MouseEvent is not a constructor.  
     // Maybe PhantomJS does not load MouseEvent constructor?
@@ -54,5 +59,13 @@ describe('Tests for BoardView', function() {
     
     expect(parseInt(rect.getAttribute('x'))).toBe(origin_x - rect.getAttribute('width') / 2);
     expect(parseInt(rect.getAttribute('y'))).toBe(origin_y - rect.getAttribute('height') / 2); 
+  });
+
+  xit('should create a new shape when clicking anywhere on the board not occupied by a shape', function() {
+
+  });
+
+  xit('should NOT create a new shape when clicking on an existing shape', function() {
+    
   });
 });

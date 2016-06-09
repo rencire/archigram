@@ -9,10 +9,14 @@ var $ = require('jquery');
 require('jquery-ui/ui/widgets/draggable.js');
 
 
+
 var rectView = Backbone.View.extend({
 
+  add_edge_mode: false,
+
   events: {
-    'click': 'handleClick'
+    'click': 'handleClick',
+    'mousedown': 'test'
   },
 
   initialize: function() {
@@ -33,9 +37,13 @@ var rectView = Backbone.View.extend({
     // console.log(d3_selection);
     // TODO refactor this.  no need to create a new drag object evertyime a new view is initialized. (singleton pattern?)
     var drag = d3_drag.drag()
-      .on('start', this.handleDragStart)
-      .on('drag', this.handleDrag.bind(this))
-      .on('end', this.handleDragEnd);
+      .on('start', this.handleDragStart.bind(this))
+      .on('drag', (function(view, d3_selection) {
+          return function(e) {
+            view.handleDrag(e, d3_selection);
+          };
+        })(this, d3_selection))
+      .on('end', this.handleDragEnd.bind(this));
 
       d3_selection.select(rect).call(drag);
 
@@ -56,36 +64,59 @@ var rectView = Backbone.View.extend({
     return this;
   },
 
-  handleDragStart: function(e) {
+  handleDragStart: function(d, i, sel) {
     console.log('drag start');
-    // console.log(e);
+
+    if (d3_selection.event.sourceEvent.shiftKey) {
+      this.add_edge_mode = true;
+    }
+
   },
   
   // http://stackoverflow.com/questions/1108480/svg-draggable-using-jquery-and-jquery-svg#6166850
-  handleDrag: function() {
-    // console.log('drag');
-    // console.log(d3_selection.event);
-    // console.log(this);
-    // console.log(this.model);
-    this.model.set({
-      x: d3_selection.event.x,
-      y: d3_selection.event.y
-    });
-    
-    // console.log(e);
-    // NOTE: `this` will refer to the element itself, not the model
-    // - walk through the d3-drag and d3-dispatch library to double check what the value of `this` is.
-    //
-    // this.model.set({
-    //   x: ui.position.left,
-    //   // TODO figure out why left and top position is off.  for now, quick fix to subtract width/2 for y value
-    //   y: ui.position.top-(this.model.get('width')/2)
-    // });
+  handleDrag: function(e, d3_selection) {
+
+    var add_edge_mode = d3_selection.event.sourceEvent.shiftKey;
+    var dragline = document.querySelector('path.link');
+
+
+    // If shift key is held, go into "add edge mode"
+    // and start drawing edge path
+    if (this.add_edge_mode) {
+      dragline.classList.toggle('hidden', false);
+      var center_x = (this.model.attributes.x);
+      var center_y = (this.model.attributes.y);
+      dragline.setAttribute('d',
+          'M' + center_x + ',' + center_y +
+          'L' + d3_selection.mouse(this.el)[0] + ',' + d3_selection.mouse(this.el)[1]
+      );
+    } else {
+
+
+      // console.log('drag');
+      // console.log(d3_selection.event);
+      // console.log(this);
+      // console.log(this.model);
+      this.model.set({
+        x: d3_selection.event.x,
+        y: d3_selection.event.y
+      });
+    }
+
   },
 
 
   handleDragEnd: function(e) {
     console.log('drag end');
+
+    this.add_edge_mode = false;
+
+    // Resets drag line for two cases:
+    // 1) releasing edge line with cursor on another shape
+    // 2) releasing edge line without cursor on another shape
+    var dragline = document.querySelector('path.link');
+    dragline.setAttribute('d', '');
+    dragline.classList.toggle('hidden', true);
   },
 
   handleClick: function (e) {
@@ -93,6 +124,12 @@ var rectView = Backbone.View.extend({
 
     this.model.set({highlight: !this.model.attributes.highlight});
     //this.el.classList.toggle('selected');
+
+
+  },
+
+  test: function() {
+    console.log('test');
   }
 
 });

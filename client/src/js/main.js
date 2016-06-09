@@ -13,8 +13,7 @@ new BoardView();
 //
 // import d3_sel from 'd3-selection';
 
-import d3_sel from 'd3';
-var d3_drag = d3_sel;
+import d3_sel from 'd3-selection';
 
 
 import * as statehandler from './state.js';

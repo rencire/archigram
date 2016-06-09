@@ -14,7 +14,7 @@ new BoardView();
 // import d3_sel from 'd3-selection';
 
 import d3_sel from 'd3-selection';
-
+import d3_drag from 'd3-drag';
 
 import * as statehandler from './state.js';
 
@@ -426,10 +426,11 @@ var state = statehandler.loadData();
     // d is the object we started drag event with (dragstart)
   }
 
-  var drag = d3.behavior.drag()
+  // changed this only to get rid of d3 library.  Not planning on using any of this code in this file once migration to Backbone is done
+  var drag = d3_drag.drag()
     .on("drag", handleDragmove)
-    .on("dragend", handleDragend)
-    .origin(function(d) {return d;});
+    .on("end", handleDragend);
+  //  .origin(function(d) {return d;});
 
 
 

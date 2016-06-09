@@ -11,6 +11,10 @@ require('jquery-ui/ui/widgets/draggable.js');
 
 var rectView = Backbone.View.extend({
 
+  events: {
+    'click': 'handleClick'
+  },
+
   initialize: function() {
     // need to create element with svg namespace, hence not using `tagName` property
     var namespace = 'http://www.w3.org/2000/svg';
@@ -44,7 +48,8 @@ var rectView = Backbone.View.extend({
       .attr('x', this.model.attributes.x - this.model.attributes.width/2)
       .attr('y', this.model.attributes.y - this.model.attributes.height/2)
       .attr('width', this.model.attributes.width)
-      .attr('height', this.model.attributes.height);
+      .attr('height', this.model.attributes.height)
+      .toggleClass('highlight', this.model.attributes.highlight);
 
     // drag.call(this.$el);
 
@@ -81,6 +86,13 @@ var rectView = Backbone.View.extend({
 
   handleDragEnd: function(e) {
     console.log('drag end');
+  },
+
+  handleClick: function (e) {
+    e.stopPropagation();
+
+    this.model.set({highlight: !this.model.attributes.highlight});
+    //this.el.classList.toggle('selected');
   }
 
 });

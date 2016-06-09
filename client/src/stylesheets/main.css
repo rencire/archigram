@@ -16,6 +16,8 @@ svg {
 rect {
   opacity: 1;
   fill: blue;
+  stroke: black;
+  stroke-width: 10px;
 }
 
 rect.highlight {

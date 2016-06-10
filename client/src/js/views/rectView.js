@@ -16,7 +16,6 @@ var rectView = Backbone.View.extend({
 
   events: {
     'click': 'handleClick',
-    'mousedown': 'test'
   },
 
   initialize: function() {
@@ -58,8 +57,6 @@ var rectView = Backbone.View.extend({
       .attr('width', this.model.attributes.width)
       .attr('height', this.model.attributes.height)
       .toggleClass('highlight', this.model.attributes.highlight);
-
-    // drag.call(this.$el);
 
     return this;
   },
@@ -126,11 +123,8 @@ var rectView = Backbone.View.extend({
     //this.el.classList.toggle('selected');
 
 
-  },
-
-  test: function() {
-    console.log('test');
   }
+
 
 });
 

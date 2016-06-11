@@ -5,7 +5,8 @@ var Edge = Backbone.Model.extend({
   defaults: {
     label: '',
     from: null,
-    to: null
+    to: null,
+    directed: true
   },
 
   validate: function(attrs) {

@@ -1,4 +1,5 @@
 import Edge from '../src/js/models/edge.js';
+import Rect from '../src/js/models/rect.js';
 
 
 describe('Default attributes', function() {
@@ -47,6 +48,7 @@ describe('Validations', function() {
     expect(errorCallback.calls.mostRecent().args[1]).toBe('`from` and `to` vertex ids cannot be the same');
       
   });
+
 
 
 });

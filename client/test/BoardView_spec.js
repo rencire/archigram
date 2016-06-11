@@ -1,4 +1,5 @@
 import BoardView from '../src/js/views/boardView.js';
+import Edge from '../src/js/models/edge.js';
 
 describe('Tests for BoardView', function() {
   beforeEach(function() {
@@ -11,7 +12,7 @@ describe('Tests for BoardView', function() {
   });
 
   afterEach(function() {
-    document.querySelector('rect').remove();
+
     this.svg.remove();
   });
 
@@ -58,7 +59,10 @@ describe('Tests for BoardView', function() {
     // console.log(origin_x);
     
     expect(parseInt(rect.getAttribute('x'))).toBe(origin_x - rect.getAttribute('width') / 2);
-    expect(parseInt(rect.getAttribute('y'))).toBe(origin_y - rect.getAttribute('height') / 2); 
+    expect(parseInt(rect.getAttribute('y'))).toBe(origin_y - rect.getAttribute('height') / 2);
+
+    // cleanup this test by removing shapes
+    document.querySelector('rect').remove();
   });
 
   xit('should create a new shape when clicking anywhere on the board not occupied by a shape', function() {
@@ -68,4 +72,21 @@ describe('Tests for BoardView', function() {
   xit('should NOT create a new shape when clicking on an existing shape', function() {
     
   });
+
+  it('should render a new edge when new edge model is added to collection', function() {
+    var edge_model = new Edge();
+    this.boardView.edgeCollection.add(edge_model);
+
+    var edge = document.querySelector('path.edge');
+    expect(edge).not.toBeNull();
+
+    expect(edge.classList.contains('edge')).toBe(true);
+    expect(edge.tagName).toBe('path');
+  });
+
+
+  // TODO hard to automate this behavior test. come back to this later
+  xit('should render a new edge when holding shift and dragging from shape A to shape B', function() {
+
+  })
 });

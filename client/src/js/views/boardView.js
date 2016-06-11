@@ -1,6 +1,10 @@
 import Backbone from 'backbone';
 import ShapeList from '../collections/shapes.js';
 import RectView from './rectView.js';
+
+import EdgeList from '../collections/edges.js';
+import EdgeView from './edgeView.js';
+
 import {rectProtoDefaults} from '../models/protos.js';
 
 import d3_sel from 'd3-selection';
@@ -18,10 +22,11 @@ var BoardView = Backbone.View.extend({
 
   initialize: function() {
     this.shapeCollection = new ShapeList();
+    this.edgeCollection = new EdgeList();
     this.render();
 
     this.listenTo(this.shapeCollection, 'add', this.renderShape);
-
+    this.listenTo(this.edgeCollection, 'add', this.renderEdge);
 
     // TODO - refactor this to remove dependency on d3.
 
@@ -80,6 +85,9 @@ var BoardView = Backbone.View.extend({
 
 
 
+
+
+
   },
 
   render: function() {
@@ -87,6 +95,11 @@ var BoardView = Backbone.View.extend({
     this.shapeCollection.each(function(model) {
       this.renderShape(model);
     });
+
+    this.edgeCollection.each(function(model) {
+       this.renderEdge(model);
+    });
+
   },
 
   renderShape: function(model) {
@@ -106,6 +119,13 @@ var BoardView = Backbone.View.extend({
     });
   },
 
+  renderEdge: function(model) {
+    var edgeView = new EdgeView({model: model});
+    this.$el.append(edgeView.render().el);
+  },
+
+
+
   //TODO figure out why this doesn't get called
   resetDragLine: function () {
     // Reset drag line for two cases:
@@ -115,6 +135,12 @@ var BoardView = Backbone.View.extend({
     dragline.setAttribute('d', '');
     dragline.classList.toggle('hidden', true);
   }
+
+
+
+
+
+
 
 
 

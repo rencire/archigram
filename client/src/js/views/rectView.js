@@ -15,8 +15,8 @@ var rectView = Backbone.View.extend({
   add_edge_mode: false,
 
   events: {
-    'click': 'handleClick',
-  },
+      'click': 'handleClick',
+    },
 
   initialize: function() {
     // need to create element with svg namespace, hence not using `tagName` property

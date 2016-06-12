@@ -174,3 +174,12 @@ function center(rect) {
     var center_y = (rect.y + rect.height/2);
     return {x: center_x, y: center_y};
 }
+
+export function resetDragLine() {
+    // Reset drag line for two cases:
+    // 1) releasing edge line with cursor on another shape
+    // 2) releasing edge line without cursor on another shape
+    var dragline = document.querySelector('path.link');
+    dragline.setAttribute('d', '');
+    dragline.classList.toggle('hidden', true);
+}

@@ -2,21 +2,34 @@ import 'babel-polyfill';
 
 import 'stylesheets/main';
 
-import 'backbone';
+import './global.js';
 
 import BoardView from './views/boardView.js';
+new BoardView();
 
-new BoardView(); 
 
-// TODO 
-// once mbostock finishes d3-drag and d3-selection, change 'd3' to the respective libraries
+
+//TODO
+//- once features migrated to backbone, remove all code below this line.
 //
-// import d3_sel from 'd3-selection';
+
+
+
+
+
 
 import d3_sel from 'd3-selection';
 import d3_drag from 'd3-drag';
 
+
+
+
 import * as statehandler from './state.js';
+
+
+
+// Global
+
 
 
 

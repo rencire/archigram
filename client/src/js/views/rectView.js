@@ -114,9 +114,9 @@ var rectView = Backbone.View.extend({
         console.log('drag end');
 
         console.log(d3_selection.event);
-        //var dest_ele = d3_selection.event.sourceEvent.target;
-        //var evt = new MouseEvent('mouseup');
-        //dest_ele.dispatchEvent(evt);
+        var dest_ele = d3_selection.event.sourceEvent.target;
+        var evt = new MouseEvent('mouseup');
+        dest_ele.dispatchEvent(evt);
 
 
         //
@@ -172,6 +172,8 @@ var rectView = Backbone.View.extend({
     },
 
     handleClick: function (e) {
+        console.log('click');
+        // stop from progating to svg's click handler
         e.stopPropagation();
 
         this.model.set({highlight: !this.model.attributes.highlight});
@@ -182,9 +184,13 @@ var rectView = Backbone.View.extend({
     },
 
 
-    handleMouseUp: function () {
+    handleMouseUp: function (e) {
         console.log('mouseup');
+
+        // stop from progating to `this` click handler, and above (svg click handler)
+        e.stopPropagation();
         //console.log(this);
+        //draw edge
     }
 
 });

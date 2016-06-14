@@ -14,10 +14,14 @@ var BoardView = Backbone.View.extend({
 
     el: '#board',
 
+    add_edge_mode: false,
+
+    edge_source_view: null,
+
     events: {
         'click': 'createShape',
         //'dragmove rect': 'test',
-        'mouseup .shape': 'test'
+        //'mouseup .shape': 'test'
     },
 
     initialize: function () {
@@ -28,7 +32,7 @@ var BoardView = Backbone.View.extend({
         this.listenTo(this.shapeCollection, 'add', this.renderShape);
         this.listenTo(this.edgeCollection, 'add', this.renderEdge);
 
-        this.listenTo(Backbone.pubSub, 'test', this.test);
+        //this.listenTo(Backbone.pubSub, 'test', this.test);
 
 
         // TODO - refactor this to remove dependency on d3.

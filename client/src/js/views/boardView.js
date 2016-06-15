@@ -69,7 +69,7 @@ var BoardView = Backbone.View.extend({
 
 
         // draw dragline
-        var dragline = svg.append('svg:path')
+        this.dragline = svg.append('svg:path')
             .attr('class', 'link hidden')
             .classed('dragline', true)
             .style('marker-end', 'url(#mark-end-arrow)');
@@ -131,7 +131,10 @@ var BoardView = Backbone.View.extend({
 
     renderEdge: function (model) {
         var edgeView = new EdgeView({model: model});
-        edgeView.render().$el.insertBefore('path.dragline');
+
+        // no jquery needed
+        var firstRect = document.getElementsByTagName('rect')[0];
+        this.el.insertBefore(edgeView.render().el, firstRect);
 
         edgeView.parentView = this;
         console.log(edgeView);

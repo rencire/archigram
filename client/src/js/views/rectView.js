@@ -24,7 +24,8 @@ var rectView = Backbone.View.extend({
         var rect = document.createElementNS(namespace, 'rect');
         rect.classList.add('shape');
 
-        this.model.on('change', this.render, this);
+        this.listenTo(this.model, 'change', this.render);
+
         // bind drag event handlers
         // http://jqueryui.com/draggable/#events
         // $(rect).draggable({

@@ -18,6 +18,15 @@ var edgeView = Backbone.View.extend({
         var path = document.createElementNS(namespace, 'path');
 
         this.setElement(path);
+
+        this.listenTo(this.model.get('from'), 'change:x', this.render);
+        this.listenTo(this.model.get('from'), 'change:y', this.render);
+
+        this.listenTo(this.model.get('to'), 'change:x', this.render);
+        this.listenTo(this.model.get('to'), 'change:y', this.render);
+
+
+
     },
 
     render: function() {

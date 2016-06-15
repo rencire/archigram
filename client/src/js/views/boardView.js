@@ -9,7 +9,6 @@ import {rectProtoDefaults} from '../models/protos.js';
 
 import d3_sel from 'd3-selection';
 
-
 var BoardView = Backbone.View.extend({
 
     el: '#board',
@@ -72,6 +71,7 @@ var BoardView = Backbone.View.extend({
         // draw dragline
         var dragline = svg.append('svg:path')
             .attr('class', 'link hidden')
+            .classed('dragline', true)
             .style('marker-end', 'url(#mark-end-arrow)');
 
 
@@ -131,7 +131,7 @@ var BoardView = Backbone.View.extend({
 
     renderEdge: function (model) {
         var edgeView = new EdgeView({model: model});
-        this.$el.append(edgeView.render().el);
+        edgeView.render().$el.insertBefore('path.dragline');
 
         edgeView.parentView = this;
         console.log(edgeView);

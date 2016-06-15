@@ -53,7 +53,7 @@ var rectView = Backbone.View.extend({
 
         this.setElement(rect);
 
-        this.listenTo(Backbone.pubSub, 'draw:edge', this.incomingEdge);
+        this.listenTo(Backbone.pubSub, 'drawEdge', this.incomingEdge);
     },
 
     render: function () {
@@ -117,11 +117,6 @@ var rectView = Backbone.View.extend({
         console.log('drag end');
 
         console.log(d3_selection.event);
-        //var dest_ele = d3_selection.event.sourceEvent.target;
-        //var evt = new MouseEvent('mouseup');
-        //evt._incomingModel = this;
-        //dest_ele.dispatchEvent(evt);
-
 
         // approach 1
         // If (this.add_edge_mode && hovering over another shape) {
@@ -129,56 +124,30 @@ var rectView = Backbone.View.extend({
         // }
 
 
-        if (this.parentView.add_edge_mode) {
-            var dest_id = d3_selection.event.sourceEvent.target.getAttribute('data-cid');
 
-            this.parentView.createEdge(this.model.cid, dest_id);
-
-            this.parentView.add_edge_mode = false;
-            this.parentView.edge_source_view = null;
-
-
-            resetDragLine();
-        }
-
-
-        // approach 2 (eventBus)
+        // approach 2
         // emit event for boardView to handle.
 
 
-        // Approach 1 seems simplest for now, so lets go with that
 
-        //console.log(this.parentView.add_edge_mode);
-        //console.log(this.parentView.edge_source_view);
-        //console.log(this);
-        //
-        //
-        //var source_view = this.parentView.edge_source_view;
-        //var dest_view = this;
-        //
-        //
-        //
-        //
-        //
-        //
-        //// TODO
-        //// Should all this logic be in the rectView? or should we ask BoardView (either by calling it or via events)
-        //// to handle adding an edge?
-        //if (this.parentView.add_edge_mode && source_view != dest_view) {
-        //    console.log(d3_selection.event);
-        //
-        //    var e = new Edge({
-        //        from: source_view.model,
-        //        to: dest_view.model
-        //    });
-        //
-        //    this.parentView.edgeCollection.add(e);
-        //}
-        //
+        // Want to let the target element handle the event
+        // NOTE: we have to re-trigger mouseup event since d3-drag blocks event from bubbling up
+        //var dest_ele = d3_selection.event.sourceEvent.target;
+        //var evt = new MouseEvent('mouseup');
+        //evt._incomingModel = this;
+        //dest_ele.dispatchEvent(evt);
 
 
+        if (this.parentView.add_edge_mode) {
+            var dest_cid = d3_selection.event.sourceEvent.target.getAttribute('data-cid');
 
+            // Why publish event? we want to let the destination shape handle the action.
+            // Else, we will have to do extra checks (test if event.target is a Rect/Shape view)
+            Backbone.pubSub.trigger('drawEdge', this.model.cid, dest_cid);
+            this.parentView.add_edge_mode = false;
+        }
 
+        resetDragLine();
 
     },
 
@@ -206,9 +175,12 @@ var rectView = Backbone.View.extend({
         e.stopPropagation();
         //console.log(this);
 
+    },
 
-        //draw edge
-        Backbone.pubSub.trigger('board:addEdge', e._incomingModel, this.model);
+    incomingEdge: function (src_cid, dest_cid) {
+        if (dest_cid == this.model.cid) {
+            this.parentView.createEdge(src_cid, dest_cid);
+        }
     }
 
 });

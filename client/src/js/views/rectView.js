@@ -5,7 +5,7 @@ import d3_selection from 'd3-selection';
 
 import Edge from '../models/edge.js';
 
-import {resetDragLine} from '../helper.js';
+import {renderPath, resetDragLine} from '../helper.js';
 
 // TODO figure out why we need to `require` these libraries
 //var $ = require('jquery');
@@ -52,6 +52,8 @@ var rectView = Backbone.View.extend({
 
 
         this.setElement(rect);
+
+        this.listenTo(Backbone.pubSub, 'draw:edge', this.incomingEdge);
     },
 
     render: function () {
@@ -60,6 +62,7 @@ var rectView = Backbone.View.extend({
             .attr('y', this.model.attributes.y - this.model.attributes.height / 2)
             .attr('width', this.model.attributes.width)
             .attr('height', this.model.attributes.height)
+            .attr('data-cid', this.model.cid)
             .toggleClass('highlight', this.model.attributes.highlight);
 
         return this;
@@ -114,17 +117,29 @@ var rectView = Backbone.View.extend({
         console.log('drag end');
 
         console.log(d3_selection.event);
-        var dest_ele = d3_selection.event.sourceEvent.target;
-        var evt = new MouseEvent('mouseup');
-        dest_ele.dispatchEvent(evt);
+        //var dest_ele = d3_selection.event.sourceEvent.target;
+        //var evt = new MouseEvent('mouseup');
+        //evt._incomingModel = this;
+        //dest_ele.dispatchEvent(evt);
 
 
-        //
         // approach 1
         // If (this.add_edge_mode && hovering over another shape) {
         //  add edge to edgeCollection with this.model, and the to.model
         // }
 
+
+        if (this.parentView.add_edge_mode) {
+            var dest_id = d3_selection.event.sourceEvent.target.getAttribute('data-cid');
+
+            this.parentView.createEdge(this.model.cid, dest_id);
+
+            this.parentView.add_edge_mode = false;
+            this.parentView.edge_source_view = null;
+
+
+            resetDragLine();
+        }
 
 
         // approach 2 (eventBus)
@@ -163,11 +178,7 @@ var rectView = Backbone.View.extend({
 
 
 
-        this.parentView.add_edge_mode = false;
-        this.parentView.edge_source_view = null;
 
-
-        resetDragLine();
 
     },
 
@@ -184,13 +195,20 @@ var rectView = Backbone.View.extend({
     },
 
 
+    //incomingEdge: function(incomingModel) {
+    //    Backbone.pubSub.trigger('board:addEdge', incomingModel, this);
+    //},
+
     handleMouseUp: function (e) {
         console.log('mouseup');
 
         // stop from progating to `this` click handler, and above (svg click handler)
         e.stopPropagation();
         //console.log(this);
+
+
         //draw edge
+        Backbone.pubSub.trigger('board:addEdge', e._incomingModel, this.model);
     }
 
 });

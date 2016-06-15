@@ -11,13 +11,13 @@ var Edge = Backbone.Model.extend({
 
   validate: function(attrs) {
     
-    if (attrs.hasOwnProperty('from') && !_.isNumber(attrs.from)) {
-      return '`from` must be a Number';
-    }
-
-    if (attrs.hasOwnProperty('to') && !_.isNumber(attrs.to)) {
-      return '`to` must be a Number';
-    }
+    //if (attrs.hasOwnProperty('from') && !_.isNumber(attrs.from)) {
+    //  return '`from` must be a Number';
+    //}
+    //
+    //if (attrs.hasOwnProperty('to') && !_.isNumber(attrs.to)) {
+    //  return '`to` must be a Number';
+    //}
 
     if (attrs.hasOwnProperty('from') && 
         attrs.hasOwnProperty('to') &&

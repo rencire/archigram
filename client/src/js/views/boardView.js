@@ -32,7 +32,7 @@ var BoardView = Backbone.View.extend({
         this.listenTo(this.shapeCollection, 'add', this.renderShape);
         this.listenTo(this.edgeCollection, 'add', this.renderEdge);
 
-        //this.listenTo(Backbone.pubSub, 'test', this.test);
+        this.listenTo(Backbone.pubSub, 'board:addEdge', this.test);
 
 
         // TODO - refactor this to remove dependency on d3.
@@ -122,6 +122,13 @@ var BoardView = Backbone.View.extend({
         });
     },
 
+    createEdge: function (src_cid, dest_cid) {
+        this.edgeCollection.add({
+            from: this.shapeCollection.get({cid: src_cid}),
+            to: this.shapeCollection.get({cid: dest_cid})
+        });
+    },
+
     renderEdge: function (model) {
         var edgeView = new EdgeView({model: model});
         this.$el.append(edgeView.render().el);
@@ -130,7 +137,10 @@ var BoardView = Backbone.View.extend({
         console.log(edgeView);
 
     },
-    test: function () {
+
+
+
+    test: function (a,b,c) {
         console.log('test');
     }
 

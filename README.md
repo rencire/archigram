@@ -1,6 +1,7 @@
-# Archigram
-Archigram is a simple tool to help with drawing and visualizing diagrams.  Original purpose is to help with drawing software architecture diagrams.
+# Archigram 
+Archigram is a simple tool to help with drawing graphs.  Original purpose is to help with drawing software architecture diagrams.
 
+Currently a WIP.
 
 #Project Management
 Trello board:

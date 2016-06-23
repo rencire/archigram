@@ -35,7 +35,7 @@ var edgeView = Backbone.View.extend({
             .attr('d', path_str)
             .addClass('link');
 
-        this.el.style = 'marker-end: url(#end-arrow)';
+        this.el.style['marker-end'] = "url(#end-arrow)";
 
         return this;
     }

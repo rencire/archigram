@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import 'jasmine-jquery';
 
-import Rect from '../src/js/models/rect.js';
+import Rect from '../../src/js/models/rect.js';
 
-import Edge from '../src/js/models/edge.js';
-import EdgeView from '../src/js/views/edgeView.js';
+import Edge from '../../src/js/models/edge.js';
+import EdgeView from '../../src/js/views/edgeView.js';
 
 
 describe('Tests for EdgeView', function() {
@@ -43,14 +43,14 @@ describe('Tests for EdgeView', function() {
         var rect1 = new Rect({id: 1, x: 100, y:100});
         var rect2 = new Rect({id: 2, x: 400, y:400} );
 
-        this.edgeView = new EdgeView({
+        var edgeView = new EdgeView({
             model: new Edge({from: rect1, to: rect2})
         });
 
         // TODO calculate this by hand? or trust the `renderPath` function?
         var expectedPathStr = 'M100,100L337.5,337.5';
-
-        expect(this.edgeView.render().el.getAttribute('d')).toBe(expectedPathStr);
+        var actualPathStr = edgeView.render().el.getAttribute('d');
+        expect(actualPathStr).toBe(expectedPathStr);
 
     });
 

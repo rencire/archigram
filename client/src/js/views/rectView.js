@@ -125,10 +125,11 @@ var rectView = Backbone.View.extend({
         // }
 
 
-
         // approach 2
         // emit event for boardView to handle.
-
+        // Two choices:
+        //    - low leve dom element handlers
+        //    - bacbkkone level event handlers
 
 
         // Want to let the target element handle the event
@@ -139,6 +140,7 @@ var rectView = Backbone.View.extend({
         //dest_ele.dispatchEvent(evt);
 
 
+        // Backbone level event handler
         if (this.parentView.add_edge_mode) {
             var dest_cid = d3_selection.event.sourceEvent.target.getAttribute('data-cid');
 

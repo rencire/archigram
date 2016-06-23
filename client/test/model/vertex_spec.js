@@ -2,7 +2,7 @@
 // e.g import state from 'state.js'
 // '
 // import state from '../src/js/state.js';
-import Vertex from '../src/js/models/vertex.js';
+import Vertex from '../../src/js/models/vertex.js';
 
 describe('Vertex Model', () => {
 

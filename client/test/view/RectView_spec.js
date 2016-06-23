@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import 'jasmine-jquery';
 
-import Rect from '../src/js/models/rect.js';
-import RectView from '../src/js/views/rectView.js';
-import BoardView from '../src/js/views/boardView.js';
+import Rect from '../../src/js/models/rect.js';
+import RectView from '../../src/js/views/rectView.js';
+import BoardView from '../../src/js/views/boardView.js';
 
 
 describe('Tests for RectView', function() {

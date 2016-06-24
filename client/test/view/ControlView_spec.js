@@ -8,29 +8,26 @@ function isHidden(el) {
 
 describe('Tests for ControlView', function() {
 
-
-
     it('should have the default controls visible', function(){
         var c_node = document.createElement('div');
         c_node.id = 'controls';
         document.body.appendChild(c_node);
 
         var control_view = new ControlView();
+        control_view.render();
 
         var cv = document.querySelector('#controls');
+        // console.log(document.body);
 
-        console.log(cv);
-
-        var ss_btn = cv.querySelector('save');
-        var pop_storage_btn = cv.querySelector('populate-storage');
-        var clr_storage_btn = cv.querySelector('clear-storage');
-        var rm_sel_shapes_btn = cv.querySelector('rm-sel-shaspes');
+        var ss_btn = cv.querySelector('#save-state-btn');
+        var pop_storage_btn = cv.querySelector('#pop-storage-btn');
+        var clr_storage_btn = cv.querySelector('#clr-storage-btn');
+        var rm_sel_shapes_btn = cv.querySelector('#rm-sel-shapes-btn');
 
         expect(isHidden(ss_btn)).toBe(false);
         expect(isHidden(pop_storage_btn)).toBe(false);
         expect(isHidden(clr_storage_btn)).toBe(false);
         expect(isHidden(rm_sel_shapes_btn)).toBe(false);
-
     });
 
 });

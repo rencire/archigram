@@ -5,7 +5,13 @@ import 'stylesheets/main';
 import './global.js';
 
 import BoardView from './views/boardView.js';
+import ControlView from './views/controlView.js';
+
 new BoardView();
+var cv = new ControlView();
+
+// Is this line below required?
+cv.render();
 
 
 
@@ -48,10 +54,10 @@ var state = statehandler.loadData();
 // get shape from `shapes` by `id`
 // function getShape(id, shapes) {}
 
+/*
 // TODO figure out why below event handler is not being called
 // document.addEventListener("DOMContentLoaded", function(event) {
   console.debug("loading bootstrap.js");
-
   // bind plain js functions
   document.querySelector(".save").addEventListener('click', function() {
     statehandler.saveData(state);
@@ -69,7 +75,7 @@ var state = statehandler.loadData();
   document.querySelector(".rm-sel-shapes").addEventListener('click', function() {
     rmSelShapes();
   });
-
+*/
 
   // d3 element handlers
   function handleShapeMousedown(d) {

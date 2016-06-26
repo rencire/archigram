@@ -100,7 +100,6 @@ var BoardView = Backbone.View.extend({
         this.edgeCollection.each(function (model) {
             this.renderEdge(model);
         });
-
     },
 
     renderShape: function (model) {

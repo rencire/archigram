@@ -1,13 +1,13 @@
 import Backbone from 'backbone';
 
 // helper function to create elements
-
-
 function ele(type, attributes) {
     var node = document.createElement(type);
 
     for (var prop in attributes) {
-        node.setAttribute(prop, attributes[prop]);
+        if (attributes.hasOwnProperty(prop)) {
+            node.setAttribute(prop, attributes[prop]);
+        }
     }
 
     for (var i = 2; i < arguments.length; i++) {
@@ -16,17 +16,16 @@ function ele(type, attributes) {
             child = document.createTextNode(child);
         } 
         node.appendChild(child);
-    };
+    }
     return node;
 }
 
 
-
+// todo Figure out why buttons are not rendering
 var ControlView = Backbone.View.extend({
     el: '#controls',
 
     render: function () {
-        console.log('in render');
         var buttons = [
             {id: 'save-state-btn', text: 'Save State'},
             {id: 'pop-storage-btn', text: 'Populate storage'},

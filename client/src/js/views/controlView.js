@@ -25,6 +25,10 @@ function ele(type, attributes) {
 var ControlView = Backbone.View.extend({
     el: '#controls',
 
+    events: {
+        'click #rm-sel-shapes-btn': 'rmSelShapes'
+    },
+
     render: function () {
         var buttons = [
             {id: 'save-state-btn', text: 'Save State'},
@@ -39,6 +43,10 @@ var ControlView = Backbone.View.extend({
         }, this);
 
         return this;
+    },
+
+    rmSelShapes: function() {
+        Backbone.pubSub.trigger('board:rmSelShapes');
     }
 });
 

@@ -26,6 +26,11 @@ var rectView = Backbone.View.extend({
 
         this.listenTo(this.model, 'change', this.render);
 
+        this.listenTo(this.model, 'destroy', this.remove);
+
+
+        //this.model.on('remove', this.removed, this);
+
         // bind drag event handlers
         // http://jqueryui.com/draggable/#events
         // $(rect).draggable({
@@ -115,9 +120,9 @@ var rectView = Backbone.View.extend({
 
 
     handleDragEnd: function (e) {
-        console.log('drag end');
+        // console.log('drag end');
 
-        console.log(d3_selection.event);
+        // console.log(d3_selection.event);
 
         // approach 1
         // If (this.add_edge_mode && hovering over another shape) {
@@ -155,7 +160,7 @@ var rectView = Backbone.View.extend({
     },
 
     handleClick: function (e) {
-        console.log('click');
+        // console.log('click');
         // stop from progating to svg's click handler
         e.stopPropagation();
 
@@ -172,7 +177,7 @@ var rectView = Backbone.View.extend({
     //},
 
     handleMouseUp: function (e) {
-        console.log('mouseup');
+        // console.log('mouseup');
 
         // stop from progating to `this` click handler, and above (svg click handler)
         e.stopPropagation();
@@ -184,6 +189,14 @@ var rectView = Backbone.View.extend({
         if (dest_cid == this.model.cid) {
             this.parentView.createEdge(src_cid, dest_cid);
         }
+    },
+
+    destroyed: function () {
+        // console.log('destroyed');
+    },
+
+    removed: function () {
+        // console.log('removed');
     }
 
 });

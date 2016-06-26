@@ -9,6 +9,11 @@ var Edge = Backbone.Model.extend({
     directed: true
   },
 
+  initialize: function () {
+    this.listenTo(this.get('from'), 'destroy', this.destroy);
+    this.listenTo(this.get('to'), 'destroy', this.destroy);
+  },
+
   validate: function(attrs) {
     
     //if (attrs.hasOwnProperty('from') && !_.isNumber(attrs.from)) {

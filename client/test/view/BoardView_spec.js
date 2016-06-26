@@ -8,7 +8,7 @@ describe('Tests for BoardView', function() {
     this.svg = document.createElementNS(namespace, 'svg');
     this.svg.id = 'board';
 
-    document.body.appendChild(this.svg); 
+    document.body.appendChild(this.svg);
     this.boardView = new BoardView();
   });
 
@@ -18,7 +18,7 @@ describe('Tests for BoardView', function() {
   });
 
   xit('Should create a new Rect with origin coordinates at mouse position click', function() {
-    // Below does not work since MouseEvent is not a constructor.  
+    // Below does not work since MouseEvent is not a constructor.
     // Maybe PhantomJS does not load MouseEvent constructor?
     //
     // var ev = new MouseEvent(
@@ -33,7 +33,7 @@ describe('Tests for BoardView', function() {
     // ev.screenX = 500;
     // ev.screenY = 500;
 
-    // DEPRECATED.  
+    // DEPRECATED.
     // However, it seems PhantomJS does not have MouseEvent constructor. Hence using this approach for now.
     //
     var ev = document.createEvent('MouseEvent');
@@ -54,11 +54,11 @@ describe('Tests for BoardView', function() {
     // console.log(document.body.innerHTML());
     var rect = document.querySelector('rect');
 
-    var origin_x = ev.offsetX; 
-    var origin_y = ev.offsetY; 
+    var origin_x = ev.offsetX;
+    var origin_y = ev.offsetY;
     // console.log(origin_x);
     // console.log(origin_x);
-    
+
     expect(parseInt(rect.getAttribute('x'))).toBe(origin_x - rect.getAttribute('width') / 2);
     expect(parseInt(rect.getAttribute('y'))).toBe(origin_y - rect.getAttribute('height') / 2);
 
@@ -71,11 +71,11 @@ describe('Tests for BoardView', function() {
   });
 
   xit('should NOT create a new shape when clicking on an existing shape', function() {
-    
+
   });
 
-  // TODO figure out why this test is failing
-  xit('should render a new edge when new edge model is added to collection', function() {
+  //// TODO figure out why this test is failing
+  it('should render a new edge when new edge model is added to collection', function() {
     var edge_model = new Edge({
       from: new Rect({x:100, y:200}),
       to: new Rect({x:200, y:100})
@@ -85,7 +85,7 @@ describe('Tests for BoardView', function() {
     var edge = document.querySelector('path.link');
     expect(edge).not.toBeNull();
 
-    expect(edge.classList.contains('edge')).toBe(true);
+    expect(edge.classList.contains('link')).toBe(true);
     expect(edge.tagName).toBe('path');
   });
 
@@ -93,6 +93,19 @@ describe('Tests for BoardView', function() {
   // TODO hard to automate this behavior test. come back to this later
   xit('should render a new edge when holding shift and dragging from shape A to shape B', function() {
 
-  })
+  });
+
+  it('should be able to remove selected shapes from collection', function() {
+
+    this.boardView.createShape({x: 200, y: 200});
+    this.boardView.createShape({x: 500, y: 500});
+
+    expect(this.boardView.shapeCollection.length).toBe(2);
+
+    this.boardView.shapeCollection.at(0).set('highlight', true);
+    this.boardView.delSelectedShapes();
+
+    expect(this.boardView.shapeCollection.length).toBe(1);
+  });
 });
 

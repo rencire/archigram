@@ -32,7 +32,7 @@ var BoardView = Backbone.View.extend({
         this.listenTo(this.edgeCollection, 'add', this.renderEdge);
 
         this.listenTo(Backbone.pubSub, 'board:addEdge', this.test);
-
+        this.listenTo(Backbone.pubSub, 'board:rmSelShapes', this.delSelectedShapes);
 
         // TODO - refactor this to remove dependency on d3.
 
@@ -103,11 +103,8 @@ var BoardView = Backbone.View.extend({
     },
 
     renderShape: function (model) {
-        // console.log('rendered');
-        // console.log(model);
         var rectView = new RectView({model: model});
         rectView.parentView = this;
-        console.log(rectView);
         this.$el.append(rectView.render().el);
     },
 
@@ -118,6 +115,14 @@ var BoardView = Backbone.View.extend({
         var model = this.shapeCollection.add({
             x: e.offsetX,
             y: e.offsetY
+        });
+    },
+
+
+    delSelectedShapes: function () {
+        var selected = this.shapeCollection.where({highlight: true});
+        selected.forEach(function (m) {
+            m.destroy();
         });
     },
 
@@ -136,14 +141,7 @@ var BoardView = Backbone.View.extend({
         this.el.insertBefore(edgeView.render().el, firstRect);
 
         edgeView.parentView = this;
-        console.log(edgeView);
 
-    },
-
-
-
-    test: function (a,b,c) {
-        console.log('test');
     }
 
 

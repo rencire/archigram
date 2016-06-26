@@ -53,7 +53,7 @@ module.exports = {
         colors: true
     },
     // Create Sourcemaps for the bundle
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
 
     resolve: {
         extensions: ['', '.js', '.css'],

@@ -30,4 +30,12 @@ describe('Tests for ControlView', function() {
         expect(isHidden(rm_sel_shapes_btn)).toBe(false);
     });
 
+    it('should ask backbone.localStorage to save shapes and edges', function () {
+
+    });
+
+    it('should load shapes from backbone.localStorage', function() {
+
+    });
+
 });

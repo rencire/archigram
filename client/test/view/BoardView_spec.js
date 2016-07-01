@@ -107,5 +107,6 @@ describe('Tests for BoardView', function() {
 
     expect(this.boardView.shapeCollection.length).toBe(1);
   });
+
 });
 

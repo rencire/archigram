@@ -13,8 +13,7 @@ describe('Tests for ControlView', function() {
         c_node.id = 'controls';
         document.body.appendChild(c_node);
 
-        var control_view = new ControlView();
-        control_view.render();
+        new ControlView();
 
         var cv = document.querySelector('#controls');
         // console.log(document.body);

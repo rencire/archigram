@@ -8,10 +8,7 @@ import BoardView from './views/boardView.js';
 import ControlView from './views/controlView.js';
 
 new BoardView();
-var cv = new ControlView();
-
-// Is this line below required?
-cv.render();
+new ControlView();
 
 
 

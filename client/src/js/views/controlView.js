@@ -29,6 +29,10 @@ var ControlView = Backbone.View.extend({
         'click #rm-sel-shapes-btn': 'rmSelShapes'
     },
 
+    initialize: function () {
+        this.render();
+    },
+
     render: function () {
         var buttons = [
             {id: 'save-state-btn', text: 'Save State'},

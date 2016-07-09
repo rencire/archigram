@@ -21,7 +21,6 @@ function ele(type, attributes) {
 }
 
 
-// todo Figure out why buttons are not rendering
 var ControlView = Backbone.View.extend({
     el: '#controls',
 
@@ -35,7 +34,6 @@ var ControlView = Backbone.View.extend({
 
     render: function () {
         var buttons = [
-            {id: 'save-state-btn', text: 'Save State'},
             {id: 'pop-storage-btn', text: 'Populate storage'},
             {id: 'clr-storage-btn', text: 'clear storage'},
             {id: 'rm-sel-shapes-btn', text: 'remove selected shapes'},

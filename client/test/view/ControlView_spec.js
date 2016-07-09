@@ -18,23 +18,22 @@ describe('Tests for ControlView', function() {
         var cv = document.querySelector('#controls');
         // console.log(document.body);
 
-        var ss_btn = cv.querySelector('#save-state-btn');
         var pop_storage_btn = cv.querySelector('#pop-storage-btn');
         var clr_storage_btn = cv.querySelector('#clr-storage-btn');
         var rm_sel_shapes_btn = cv.querySelector('#rm-sel-shapes-btn');
 
-        expect(isHidden(ss_btn)).toBe(false);
         expect(isHidden(pop_storage_btn)).toBe(false);
         expect(isHidden(clr_storage_btn)).toBe(false);
         expect(isHidden(rm_sel_shapes_btn)).toBe(false);
     });
 
-    it('should ask backbone.localStorage to save shapes and edges', function () {
-
+    /*
+     * New feature:
+     * No need for user to explicitly click button save shapes.  Shapes should be saved to persistent layer when updated.
+     */
+    xit('should ask backbone.localStorage to save shapes and edges', function () {
+        
     });
 
-    it('should load shapes from backbone.localStorage', function() {
-
-    });
 
 });

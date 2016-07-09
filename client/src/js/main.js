@@ -7,8 +7,11 @@ import './global.js';
 import BoardView from './views/boardView.js';
 import ControlView from './views/controlView.js';
 
-new BoardView();
+var bv = new BoardView();
 new ControlView();
+
+// Load data after boardview is loaded
+bv.loadData();
 
 
 

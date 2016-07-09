@@ -108,11 +108,12 @@ var BoardView = Backbone.View.extend({
         this.$el.append(rectView.render().el);
     },
 
+    // TODO consider moving some of these methods to model if necessary
     createShape: function (e) {
 
         // TODO figure out difference between clientX/screenX/offsetX
         // in Rect.js?
-        var model = this.shapeCollection.add({
+        var model = this.shapeCollection.create({
             x: e.offsetX,
             y: e.offsetY
         });
@@ -127,7 +128,7 @@ var BoardView = Backbone.View.extend({
     },
 
     createEdge: function (src_cid, dest_cid) {
-        this.edgeCollection.add({
+        this.edgeCollection.create({
             from: this.shapeCollection.get({cid: src_cid}),
             to: this.shapeCollection.get({cid: dest_cid})
         });
@@ -142,6 +143,10 @@ var BoardView = Backbone.View.extend({
 
         edgeView.parentView = this;
 
+    },
+
+    loadData: function() {
+        this.shapeCollection.fetch();
     }
 
 

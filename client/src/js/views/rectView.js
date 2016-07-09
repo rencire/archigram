@@ -153,6 +153,9 @@ var rectView = Backbone.View.extend({
             // Else, we will have to do extra checks (test if event.target is a Rect/Shape view)
             Backbone.pubSub.trigger('drawEdge', this.model.cid, dest_cid);
             this.parentView.add_edge_mode = false;
+        } else {
+            // We want to save model's new coordinates to persistent layer (local storage)
+            this.model.save();
         }
 
         resetDragLine();
@@ -164,11 +167,7 @@ var rectView = Backbone.View.extend({
         // stop from progating to svg's click handler
         e.stopPropagation();
 
-        this.model.set({highlight: !this.model.attributes.highlight});
-        //this.el.classList.toggle('selected');
-
-        // Test using Backbone as the event bus
-        //Backbone.pubSub.trigger('test');
+        this.model.save({highlight: !this.model.attributes.highlight});
     },
 
 

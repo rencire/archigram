@@ -1,14 +1,6 @@
 import Backbone from 'backbone';
 
-import d3_drag from 'd3-drag';
-import d3_selection from 'd3-selection';
-
-// TODO figure out why we need to `require` these libraries
-// Doesn't webpack handle es6 import? Maybe it can't handle jquery-ui format?
-import $ from 'jquery';
-
 import {renderPath} from '../helper.js';
-
 
 
 var edgeView = Backbone.View.extend({
@@ -25,7 +17,8 @@ var edgeView = Backbone.View.extend({
         this.listenTo(this.model.get('to'), 'change:x', this.render);
         this.listenTo(this.model.get('to'), 'change:y', this.render);
 
-        this.listenTo(this.model, 'destroy', this.remove)
+        this.listenTo(this.model.get('to'), 'destroy', this.remove)
+        this.listenTo(this.model.get('from'), 'destroy', this.remove)
 
     },
 

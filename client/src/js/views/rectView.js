@@ -144,22 +144,31 @@ var rectView = Backbone.View.extend({
         //evt._incomingModel = this;
         //dest_ele.dispatchEvent(evt);
 
+        // TODO handle case where we release edge within the origin shape.
+        // if (this.parentView.add_edge_mode && mouse coordinates are still in shape) {
+        //     resetDragLine();
+        //     return
 
         // Backbone level event handler
         if (this.parentView.add_edge_mode) {
+
             var dest_cid = d3_selection.event.sourceEvent.target.getAttribute('data-cid');
+
+            // TODO consider changing from cid to id.
+            // are models guaranteed to have the same cid when loaded from persistence layer?
 
             // Why publish event? we want to let the destination shape handle the action.
             // Else, we will have to do extra checks (test if event.target is a Rect/Shape view)
             Backbone.pubSub.trigger('drawEdge', this.model.cid, dest_cid);
             this.parentView.add_edge_mode = false;
-        } else {
-            // We want to save model's new coordinates to persistent layer (local storage)
-            this.model.save();
+            resetDragLine();
+            return;
         }
 
+        // Otherwise, we're not dragging.
+        // We want to save model's new coordinates to persistent layer (local storage)
+        this.model.save();
         resetDragLine();
-
     },
 
     handleClick: function (e) {

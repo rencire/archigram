@@ -127,10 +127,10 @@ var BoardView = Backbone.View.extend({
         });
     },
 
-    createEdge: function (src_cid, dest_cid) {
+    createEdge: function (src_id, dest_id) {
         this.edgeCollection.create({
-            from: this.shapeCollection.get({cid: src_cid}),
-            to: this.shapeCollection.get({cid: dest_cid})
+            from: this.shapeCollection.get({id: src_id}),
+            to: this.shapeCollection.get({id: dest_id})
         });
     },
 

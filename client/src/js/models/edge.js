@@ -17,6 +17,8 @@ var Edge = Backbone.Model.extend({
     },
 
 
+    // TODO resolve bug where some deleted edges are not synced with localStorage.
+
     sync: function (method, model, options) {
         var from = this.get('from');
         var to = this.get('to');

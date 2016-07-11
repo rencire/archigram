@@ -68,7 +68,7 @@ var rectView = Backbone.View.extend({
             .attr('y', this.model.attributes.y - this.model.attributes.height / 2)
             .attr('width', this.model.attributes.width)
             .attr('height', this.model.attributes.height)
-            .attr('data-cid', this.model.cid)
+            .attr('data-id', this.model.id)
             .toggleClass('highlight', this.model.attributes.highlight);
 
         return this;
@@ -152,14 +152,14 @@ var rectView = Backbone.View.extend({
         // Backbone level event handler
         if (this.parentView.add_edge_mode) {
 
-            var dest_cid = d3_selection.event.sourceEvent.target.getAttribute('data-cid');
+            var dest_id = d3_selection.event.sourceEvent.target.getAttribute('data-id');
 
             // TODO consider changing from cid to id.
             // are models guaranteed to have the same cid when loaded from persistence layer?
 
             // Why publish event? we want to let the destination shape handle the action.
             // Else, we will have to do extra checks (test if event.target is a Rect/Shape view)
-            Backbone.pubSub.trigger('drawEdge', this.model.cid, dest_cid);
+            Backbone.pubSub.trigger('drawEdge', this.model.id, dest_id);
             this.parentView.add_edge_mode = false;
             resetDragLine();
             return;
@@ -193,9 +193,9 @@ var rectView = Backbone.View.extend({
 
     },
 
-    incomingEdge: function (src_cid, dest_cid) {
-        if (dest_cid == this.model.cid) {
-            this.parentView.createEdge(src_cid, dest_cid);
+    incomingEdge: function (src_id, dest_id) {
+        if (dest_id == this.model.id) {
+            this.parentView.createEdge(src_id, dest_id);
         }
     },
 

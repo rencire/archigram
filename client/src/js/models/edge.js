@@ -15,9 +15,13 @@ var Edge = Backbone.Model.extend({
         this.listenTo(this, 'sync', this.postSync);
     },
 
+    // if this func is called w/o args, that means we are creating a new edge.
+    // else, we are fetching from server.
     listenToShapes: function(from, to) {
-        this.listenTo(from, 'destroy', this.mydestroy);
-        this.listenTo(to, 'destroy', this.mydestroy);
+        var from_model = from || this.get('from');
+        var to_model = to || this.get('to');
+        this.listenTo(from_model, 'destroy', this.mydestroy);
+        this.listenTo(to_model, 'destroy', this.mydestroy);
     },
 
     // TODO resolve bug where some deleted edges are not synced with localStorage.
@@ -25,10 +29,10 @@ var Edge = Backbone.Model.extend({
     // can problem arise when both 'from' and 'to' are both destroyed, one after another?
 
     mydestroy: function (a,b,c){
-        "use strict";
         console.log(a);
         console.log(b);
         console.log(c);
+        this.destroy();
     },
 
     sync: function (method, model, options) {

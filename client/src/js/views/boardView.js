@@ -27,10 +27,11 @@ var BoardView = Backbone.View.extend({
         this.shapeCollection = new ShapeList();
         this.edgeCollection = new EdgeList();
         
-        this.loadData();
-        this.render();
+        // this.render();
 
         this.listenTo(this.shapeCollection, 'add', this.renderShape);
+        // this.listenTo(this.shapeCollection, 'sync', this.fetchEdges);
+
         this.listenTo(this.edgeCollection, 'add', this.renderEdge);
 
         this.listenTo(Backbone.pubSub, 'board:addEdge', this.test);
@@ -91,6 +92,7 @@ var BoardView = Backbone.View.extend({
         //
 
 
+        this.loadData();
     },
 
     render: function () {
@@ -144,16 +146,16 @@ var BoardView = Backbone.View.extend({
         this.el.insertBefore(edgeView.render().el, firstRect);
 
         edgeView.parentView = this;
-
     },
 
-    loadData: function() {
-        this.shapeCollection.fetch();
-
+    fetchEdges: function() {
         // Need to convert each edge's 'from' and 'to' attributes from ids into objects.
 
+        // Approach 1:
+        // - Once all data is fetched, modify the 'from' and 'to' attributes
+
         // Hence, we need to surpress the 'add' event, else we will
-        // prematurely render the edge?
+        // prematurely render the edge w/o the model object in the edge's attributes
         this.edgeCollection.fetch({silent: true});
 
         this.edgeCollection.forEach(function(model) {
@@ -166,6 +168,31 @@ var BoardView = Backbone.View.extend({
             model.listenToShapes(from, to);
             this.renderEdge(model);
         }, this);
+
+
+        // Approach 2:
+        // - use custom 'onsuccess' handler
+
+        // var onEdgeCollSuccess = function() {};
+        // this.edgeCollection.fetch({success: onEdgeCollSuccess});
+
+        console.log(this.shapeCollection);
+        console.log(this.edgeCollection);
+
+    },
+
+    loadData: function() {
+        var onShapeSuccess = (function(resp) {
+            resp.models.forEach(function(m) {
+                this.shapeCollection.add(m);
+                this.renderShape(m);
+            }, this);
+
+            this.fetchEdges();
+        }).bind(this);
+
+        this.shapeCollection.fetch({success: onShapeSuccess});
+
     }
 
 

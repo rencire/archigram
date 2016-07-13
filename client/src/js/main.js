@@ -10,9 +10,6 @@ import ControlView from './views/controlView.js';
 var bv = new BoardView();
 new ControlView();
 
-// Load data after boardview is loaded
-bv.loadData();
-
 
 
 //TODO

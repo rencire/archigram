@@ -17,8 +17,7 @@ var edgeView = Backbone.View.extend({
         this.listenTo(this.model.get('to'), 'change:x', this.render);
         this.listenTo(this.model.get('to'), 'change:y', this.render);
 
-        this.listenTo(this.model.get('to'), 'destroy', this.remove);
-        this.listenTo(this.model.get('from'), 'destroy', this.remove);
+        this.listenTo(this.model, 'destroy', this.remove);
 
     },
 

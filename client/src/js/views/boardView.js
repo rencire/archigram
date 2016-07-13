@@ -26,6 +26,8 @@ var BoardView = Backbone.View.extend({
     initialize: function () {
         this.shapeCollection = new ShapeList();
         this.edgeCollection = new EdgeList();
+        
+        this.loadData();
         this.render();
 
         this.listenTo(this.shapeCollection, 'add', this.renderShape);
@@ -151,14 +153,17 @@ var BoardView = Backbone.View.extend({
         // Need to convert each edge's 'from' and 'to' attributes from ids into objects.
 
         // Hence, we need to surpress the 'add' event, else we will
-        // prematurely render the edge.
+        // prematurely render the edge?
         this.edgeCollection.fetch({silent: true});
 
         this.edgeCollection.forEach(function(model) {
             var from_id = model.get('from');
             var to_id = model.get('to');
-            model.set('from', this.shapeCollection.get(from_id));
-            model.set('to', this.shapeCollection.get(to_id));
+            var from = this.shapeCollection.get(from_id);
+            var to = this.shapeCollection.get(to_id);
+            model.set('from', from);
+            model.set('to', to);
+            model.listenToShapes(from, to);
             this.renderEdge(model);
         }, this);
     }

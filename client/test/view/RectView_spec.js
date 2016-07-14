@@ -22,7 +22,8 @@ describe('Tests for RectView', function() {
 
 
   it('Should be tied to a DOM element when created, based off the property provided.', function() {
-    expect(this.rectView.el.tagName.toLowerCase()).toBe('rect');
+    expect(this.rectView.el.tagName.toLowerCase()).toBe('g');
+    expect(this.rectView.el.firstChild.tagName.toLowerCase()).toBe('rect');
   });
 
   it('Is backed by a model instance', function() {

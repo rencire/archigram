@@ -35,3 +35,17 @@ path.link {
 path.link.hidden {
   stroke-width: 0;
 }
+
+/*magically made the div fit the text*/
+.foreign {
+  /*text-align: left;*/
+}
+.insideforeign {
+  display: inline-block;
+  text-align: center;
+  color: orange;
+  /*display: flex;*/
+  /*align-items: center;*/
+  /*justify-content: center;*/
+  /*height: 100%;*/
+}

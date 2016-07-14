@@ -117,6 +117,7 @@ var BoardView = Backbone.View.extend({
     // TODO consider moving some of these methods to model if necessary
     createShape: function (e) {
 
+        console.log(e);
         // TODO figure out difference between clientX/screenX/offsetX
         // in Rect.js?
         var model = this.shapeCollection.create({
@@ -150,7 +151,7 @@ var BoardView = Backbone.View.extend({
         var edgeView = new EdgeView({model: model});
 
         // no jquery needed
-        var firstRect = document.getElementsByTagName('rect')[0];
+        var firstRect = document.getElementsByTagName('g')[0];
         this.el.insertBefore(edgeView.render().el, firstRect);
 
         edgeView.parentView = this; },

@@ -18,12 +18,12 @@ describe('Tests for ControlView', function() {
         var cv = document.querySelector('#controls');
         // console.log(document.body);
 
-        var pop_storage_btn = cv.querySelector('#pop-storage-btn');
-        var clr_storage_btn = cv.querySelector('#clr-storage-btn');
+        var gen_diag_btn = cv.querySelector('#gen-diag-btn');
+        var clr_data_btn = cv.querySelector('#clr-data-btn');
         var rm_sel_shapes_btn = cv.querySelector('#rm-sel-shapes-btn');
 
-        expect(isHidden(pop_storage_btn)).toBe(false);
-        expect(isHidden(clr_storage_btn)).toBe(false);
+        expect(isHidden(gen_diag_btn)).toBe(false);
+        expect(isHidden(clr_data_btn)).toBe(false);
         expect(isHidden(rm_sel_shapes_btn)).toBe(false);
     });
 

@@ -15,17 +15,44 @@ var rectView = Backbone.View.extend({
 
     events: {
         'click': 'handleClick',
-        'mouseup': 'handleMouseUp'
+        'click rect': 'toggleSelect',
+        'mouseup': 'handleMouseUp',
+        'mousedown': 'handleMouseDown'
     },
+
 
     initialize: function () {
         // need to create element with svg namespace, hence not using `tagName` property
         var namespace = 'http://www.w3.org/2000/svg';
+
+        // Create rect ele
+        var group = document.createElementNS(namespace, 'g');
         var rect = document.createElementNS(namespace, 'rect');
         rect.classList.add('shape');
 
-        this.listenTo(this.model, 'change', this.render);
 
+        // Create editable text ele
+        // To make text editable, look into usinga  foreignObject
+        // Credt to john ktejik
+        //http://stackoverflow.com/questions/9308938/inline-text-editing-in-svg
+        var myforeign = document.createElementNS(namespace, 'foreignObject')
+        var textdiv = document.createElement("div");
+        var textnode = document.createTextNode("Click to edit");
+        textdiv.setAttribute("contentEditable", "true");
+        textdiv.setAttribute("width", "auto");
+        myforeign.classList.add("foreign"); //to make div fit text
+        textdiv.classList.add("insideforeign"); //to make div fit text
+
+
+        // add elements to group svg
+        group.appendChild(rect);
+        group.appendChild(myforeign);
+        myforeign.appendChild(textdiv);
+        textdiv.appendChild(textnode);
+
+
+        // Listeners
+        this.listenTo(this.model, 'change', this.render);
         this.listenTo(this.model, 'destroy', this.remove);
 
 
@@ -53,23 +80,34 @@ var rectView = Backbone.View.extend({
             .subject(this.model.attributes);
 
         d3_selection.select(rect).call(drag);
-            //.on('mouseup', this.handleShapeMouseup);
+        //.on('mouseup', this.handleShapeMouseup);
 
 
-
-        this.setElement(rect);
+        this.setElement(group);
 
         this.listenTo(Backbone.pubSub, 'drawEdge', this.incomingEdge);
     },
 
     render: function () {
-        this.$el
-            .attr('x', this.model.attributes.x - this.model.attributes.width / 2)
-            .attr('y', this.model.attributes.y - this.model.attributes.height / 2)
-            .attr('width', this.model.attributes.width)
-            .attr('height', this.model.attributes.height)
-            .attr('data-id', this.model.id)
-            .toggleClass('highlight', this.model.attributes.highlight);
+        var rect = this.el.firstChild;
+        var fo = this.el.lastChild;
+        var text = fo.firstChild;
+        var txtWidth = this.model.get('width') - 20;
+
+        fo.setAttribute('x', (this.model.get('x') - this.model.attributes.width / 2) + 10);
+        fo.setAttribute('y', this.model.get('y') - this.model.get('height')/2 + 20);
+        fo.setAttribute('width', txtWidth );
+
+        text.style["max-width"] = txtWidth + 'px';
+
+
+        rect.setAttribute('x', this.model.attributes.x - this.model.attributes.width / 2);
+        rect.setAttribute('y', this.model.attributes.y - this.model.attributes.height / 2);
+        rect.setAttribute('width', this.model.attributes.width);
+        rect.setAttribute('height', this.model.attributes.height);
+        rect.setAttribute('data-id', this.model.id);
+
+        rect.classList.toggle('highlight', this.model.get('highlight'));
 
         return this;
     },
@@ -172,10 +210,12 @@ var rectView = Backbone.View.extend({
     },
 
     handleClick: function (e) {
-        // console.log('click');
-        // stop from progating to svg's click handler
+        // stop from progating to boardview's click handler
         e.stopPropagation();
 
+    },
+
+    toggleSelect: function(e) {
         this.model.save({highlight: !this.model.attributes.highlight});
     },
 
@@ -185,11 +225,11 @@ var rectView = Backbone.View.extend({
     //},
 
     handleMouseUp: function (e) {
-        // console.log('mouseup');
+        console.log('mouseup');
 
         // stop from progating to `this` click handler, and above (svg click handler)
         e.stopPropagation();
-        //console.log(this);
+        console.log(this);
 
     },
 

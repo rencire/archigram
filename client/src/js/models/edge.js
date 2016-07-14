@@ -10,22 +10,12 @@ var Edge = Backbone.Model.extend({
     },
 
     
-    initialize: function (from, to) {
-        this.listenTo(from, 'destroy', this.mydestroy);
-        this.listenTo(to, 'destroy', this.mydestroy);
+    initialize: function () {
+        this.listenTo(this.get('from'), 'destroy', this.destroy);
+        this.listenTo(this.get('to'), 'destroy', this.destroy);
         this.listenTo(this, 'sync', this.postSync);
     },
 
-    // TODO resolve bug where some deleted edges are not synced with localStorage.
-
-    // can problem arise when both 'from' and 'to' are both destroyed, one after another?
-
-    mydestroy: function (a,b,c){
-        console.log(a);
-        console.log(b);
-        console.log(c);
-        this.destroy();
-    },
 
     sync: function (method, model, options) {
         // - If destroying, no need to save 'from' and 'to'

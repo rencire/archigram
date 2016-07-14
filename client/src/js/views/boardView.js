@@ -132,6 +132,12 @@ var BoardView = Backbone.View.extend({
     },
 
     createEdge: function (src_id, dest_id) {
+        // alt approach:
+        // - save edge w/ ids
+        // - add edge to collection replacing ids w/ respective shape objects
+        //
+        // But better to make the least amount of changes at the most specific cutpoint (e.g model.sync)
+        // Hence sticking w/ current approach.
         this.edgeCollection.create({
             from: this.shapeCollection.get({id: src_id}),
             to: this.shapeCollection.get({id: dest_id})

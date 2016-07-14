@@ -25,7 +25,9 @@ var ControlView = Backbone.View.extend({
     el: '#controls',
 
     events: {
-        'click #rm-sel-shapes-btn': 'rmSelShapes'
+        'click #rm-sel-shapes-btn': 'rmSelShapes',
+        'click #gen-diag-btn': 'genDiagram',
+        'click #clr-data-btn': 'clearData'
     },
 
     initialize: function () {
@@ -34,8 +36,8 @@ var ControlView = Backbone.View.extend({
 
     render: function () {
         var buttons = [
-            {id: 'pop-storage-btn', text: 'Populate storage'},
-            {id: 'clr-storage-btn', text: 'clear storage'},
+            {id: 'gen-diag-btn', text: 'Gen Diagram'},
+            {id: 'clr-data-btn', text: 'Clear Data'},
             {id: 'rm-sel-shapes-btn', text: 'remove selected shapes'},
         ];
 
@@ -49,6 +51,14 @@ var ControlView = Backbone.View.extend({
 
     rmSelShapes: function() {
         Backbone.pubSub.trigger('board:rmSelShapes');
+    },
+
+    genDiagram: function() {
+        Backbone.pubSub.trigger('board:genDiagram');
+    },
+
+    clearData: function() {
+        Backbone.pubSub.trigger('board:destroyAll');
     }
 });
 

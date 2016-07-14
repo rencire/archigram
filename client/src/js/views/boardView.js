@@ -36,6 +36,8 @@ var BoardView = Backbone.View.extend({
 
         this.listenTo(Backbone.pubSub, 'board:addEdge', this.test);
         this.listenTo(Backbone.pubSub, 'board:rmSelShapes', this.delSelectedShapes);
+        this.listenTo(Backbone.pubSub, 'board:genDiagram', this.genDiagram);
+        this.listenTo(Backbone.pubSub, 'board:destroyAll', this.destroyAll);
 
         // TODO - refactor this to remove dependency on d3.
 
@@ -151,8 +153,7 @@ var BoardView = Backbone.View.extend({
         var firstRect = document.getElementsByTagName('rect')[0];
         this.el.insertBefore(edgeView.render().el, firstRect);
 
-        edgeView.parentView = this;
-    },
+        edgeView.parentView = this; },
 
     fetchEdges: function() {
         // Need to convert each edge's 'from' and 'to' attributes from ids into objects.
@@ -196,6 +197,40 @@ var BoardView = Backbone.View.extend({
         }).bind(this);
 
         this.shapeCollection.fetch({success: onShapeSuccess});
+
+    },
+
+    destroyAll: function() {
+        // clear all shapes and edges on board
+        var model;
+        while (model = this.shapeCollection.first()) {
+            model.destroy();
+        }
+
+        var edge;
+        while (edge = this.edgeCollection.first()) {
+            edge.destroy();
+        }
+    },
+
+    genDiagram: function() {
+        this.destroyAll();
+        
+        // add preset diagram
+        var coords = [
+            {x: 100, y:200},
+            {x: 350, y:550},
+            {x: 300, y:250},
+            {x: 500, y:100},
+        ];
+
+        coords.forEach(function(pnt) {
+            this.shapeCollection.create(pnt);
+        }, this);
+
+        this.edgeCollection.create({from: this.shapeCollection.at(2), to: this.shapeCollection.at(0)});
+        this.edgeCollection.create({from: this.shapeCollection.at(1), to: this.shapeCollection.at(3)});
+        this.edgeCollection.create({from: this.shapeCollection.at(1), to: this.shapeCollection.at(2)});
 
     }
 

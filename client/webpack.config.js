@@ -11,7 +11,10 @@ var dir_html = path.resolve(__dirname, 'src/html');
 var dir_build = path.resolve(__dirname, 'build');
 
 module.exports = {
-    entry: path.join(dir_js, 'main.js'),
+    entry: [
+        path.join(dir_js, 'main.js'),
+        // path.join(dir_js, 'views/boardView.js'),
+    ],
     output: {
         path: dir_build,
         filename: 'bundle.js'
@@ -23,7 +26,7 @@ module.exports = {
         loaders: [
             {
                 loader: 'babel-loader',
-                exclude: /(node_modules)/,
+                // exclude: /(node_modules)/,
                 test: dir_js,
             },
             {
@@ -38,18 +41,30 @@ module.exports = {
             { from: dir_html } // to: output.path
         ]),
         // Avoid publishing files when compilation fails
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+
+        new webpack.ProvidePlugin({
+          // "d3":"d3"
+        }),
+
     ],
     stats: {
         // Nice colored output
         colors: true
     },
     // Create Sourcemaps for the bundle
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
 
     resolve: {
         extensions: ['', '.js', '.css'],
-        root: [path.join(__dirname, './src')]
-    },
+        // modulesDirectories: ['node_modules'],
+        root: [path.join(__dirname, './src')],
+        // alias: {
+        //   // bind version of jquery-ui
+        //   "jquery-ui": "jquery-ui/jquery-ui.js",      
+        //   // bind to modules;
+        //   modules: path.join(__dirname, "node_modules"),
+        // }
+    }
 
 };

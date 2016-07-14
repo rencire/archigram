@@ -25,11 +25,24 @@ npm install
 npm run start
 ```
 
-##References:
+## References:
+
+### Webpack
+- https://webpack.github.io/
 - https://leanpub.com/setting-up-es6/read#sec_webpack-babel
 - https://www.bensmithett.com/smarter-css-builds-with-webpack/
 - http://www.syntaxsuccess.com/viewarticle/5532c5c0873cb5f0449ffcc5
 - https://medium.com/@grrowl/testing-react-with-jasmine-and-karma-using-webpack-and-babel-18fc268f066a#.7fpog9kzr
+- https://www.paypal-engineering.com/2015/08/07/1450/
+- https://blog.madewithlove.be/post/webpack-your-bags/
+
+
+### Modules
+- http://exploringjs.com/es6/ch_modules.html
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
+
+### Misc.
+- http://www.nicoespeon.com/en/2015/06/objects-composition-backbone/
 
 
 

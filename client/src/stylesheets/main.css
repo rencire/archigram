@@ -16,6 +16,9 @@ svg {
 rect {
   opacity: 1;
   fill: blue;
+  stroke: black;
+  stroke-width: 10px;
+  /*z-index: 500;*/
 }
 
 rect.highlight {
@@ -26,6 +29,7 @@ path.link {
   stroke: #333;
   stroke-width: 6px;
   cursor: default;
+  /*z-index: 200;*/
 }
 
 path.link.hidden {

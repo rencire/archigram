@@ -3,3 +3,11 @@
 **/node_modules
 
 client/build
+
+
+# config
+.jshintrc
+
+*.DS_Store
+*.idea/
+*.log

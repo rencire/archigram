@@ -1,4 +1,4 @@
-# Archigram 
+## Archigram
 Archigram is a simple tool to help with drawing graphs.  Original purpose is to help with drawing software architecture diagrams.
 
 Currently a WIP.
@@ -24,6 +24,10 @@ cd client
 npm install
 npm run start
 ```
+
+To use, click on the page to create a shape.
+To add edges between shapes, hold down 'shift' key and drag from one shape to another.
+
 
 ## References:
 

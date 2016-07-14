@@ -1,4 +1,4 @@
-import Rect from '../src/js/models/rect.js';
+import Rect from '../../src/js/models/rect.js';
 
 describe('Rect validation tests', function() {
   var errorCallback;

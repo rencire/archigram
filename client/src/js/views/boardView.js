@@ -156,38 +156,36 @@ var BoardView = Backbone.View.extend({
 
         // Hence, we need to surpress the 'add' event, else we will
         // prematurely render the edge w/o the model object in the edge's attributes
-        this.edgeCollection.fetch({silent: true});
+        // this.edgeCollection.fetch({silent: true});
+        //
+        // this.edgeCollection.forEach(function(model) {
+        //     var from_id = model.get('from');
+        //     var to_id = model.get('to');
+        //     var from = this.shapeCollection.get(from_id);
+        //     var to = this.shapeCollection.get(to_id);
+        //     model.set('from', from);
+        //     model.set('to', to);
+        //     model.listenToShapes(from, to);
+        //     this.renderEdge(model);
+        // }, this);
 
-        this.edgeCollection.forEach(function(model) {
-            var from_id = model.get('from');
-            var to_id = model.get('to');
-            var from = this.shapeCollection.get(from_id);
-            var to = this.shapeCollection.get(to_id);
-            model.set('from', from);
-            model.set('to', to);
-            model.listenToShapes(from, to);
-            this.renderEdge(model);
-        }, this);
-
+        // Problem with approach above: on edge initialization, was listening to shape 'ids' instead of shape objects
 
         // Approach 2:
-        // - use custom 'onsuccess' handler
+        // - use custom 'success' handler
+        var onEdgeCollSuccess = (function(collection, resp, options) {
+            resp.forEach(function(m) {
+                m.from = this.shapeCollection.get(m.from);
+                m.to = this.shapeCollection.get(m.to);
+                this.edgeCollection.add(m);
+            }, this);
+        }).bind(this);
 
-        // var onEdgeCollSuccess = function() {};
-        // this.edgeCollection.fetch({success: onEdgeCollSuccess});
-
-        console.log(this.shapeCollection);
-        console.log(this.edgeCollection);
-
+        this.edgeCollection.fetch({add:false, success: onEdgeCollSuccess});
     },
 
     loadData: function() {
-        var onShapeSuccess = (function(resp) {
-            resp.models.forEach(function(m) {
-                this.shapeCollection.add(m);
-                this.renderShape(m);
-            }, this);
-
+        var onShapeSuccess = (function(collection, resp, options) {
             this.fetchEdges();
         }).bind(this);
 

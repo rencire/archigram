@@ -10,18 +10,10 @@ var Edge = Backbone.Model.extend({
     },
 
     
-    initialize: function () {
-        this.listenToShapes();
+    initialize: function (from, to) {
+        this.listenTo(from, 'destroy', this.mydestroy);
+        this.listenTo(to, 'destroy', this.mydestroy);
         this.listenTo(this, 'sync', this.postSync);
-    },
-
-    // if this func is called w/o args, that means we are creating a new edge.
-    // else, we are fetching from server.
-    listenToShapes: function(from, to) {
-        var from_model = from || this.get('from');
-        var to_model = to || this.get('to');
-        this.listenTo(from_model, 'destroy', this.mydestroy);
-        this.listenTo(to_model, 'destroy', this.mydestroy);
     },
 
     // TODO resolve bug where some deleted edges are not synced with localStorage.

@@ -3,7 +3,7 @@ import _ from 'underscore';
 // Collection must assign correct id to Vertex (collection.length)
 var vertexProtoDefaults = {
   id: null,
-  label: '',
+  label: 'Click to edit',
   x: 100,
   y: 100,
   highlight: false

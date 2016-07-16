@@ -1,4 +1,5 @@
 import Backbone from 'backbone';
+import _ from 'underscore';
 
 import d3_drag from 'd3-drag';
 import d3_selection from 'd3-selection';
@@ -17,8 +18,18 @@ var rectView = Backbone.View.extend({
         'click': 'handleClick',
         'click rect': 'toggleSelect',
         'mouseup': 'handleMouseUp',
-        'mousedown': 'handleMouseDown'
+        'mousedown': 'handleMouseDown',
+        'keyup .foreign': 'handleEditLabel'
     },
+
+    handleEditLabel: _.debounce(function(e) {
+        var text = e.target.textContent;
+        // grab text from dom
+        //var text = this.el.querySelecto
+        // set text
+        this.model.set('label', text);
+        //this.model.save();
+    }, 500),
 
 
     initialize: function () {
@@ -52,7 +63,10 @@ var rectView = Backbone.View.extend({
 
 
         // Listeners
-        this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'change:x', this.renderPos);
+        this.listenTo(this.model, 'change:y', this.renderPos);
+        this.listenTo(this.model, 'change:highlight', this.renderData);
+        this.listenTo(this.model, 'change:label', this.renderData);
         this.listenTo(this.model, 'destroy', this.remove);
 
 
@@ -88,26 +102,42 @@ var rectView = Backbone.View.extend({
         this.listenTo(Backbone.pubSub, 'drawEdge', this.incomingEdge);
     },
 
+
+    renderData: function() {
+        var rect = this.el.firstChild;
+        rect.classList.toggle('highlight', this.model.get('highlight'));
+    },
+
+    renderPos: function() {
+        var rect = this.el.firstChild;
+        var fo = this.el.lastChild;
+
+        fo.setAttribute('x', (this.model.get('x') - this.model.attributes.width / 2) + 10);
+        fo.setAttribute('y', this.model.get('y') - this.model.get('height')/2 + 20);
+
+        rect.setAttribute('x', this.model.attributes.x - this.model.attributes.width / 2);
+        rect.setAttribute('y', this.model.attributes.y - this.model.attributes.height / 2);
+
+        return this;
+    },
+
     render: function () {
+        this.renderPos();
+        this.renderData();
+
         var rect = this.el.firstChild;
         var fo = this.el.lastChild;
         var text = fo.firstChild;
         var txtWidth = this.model.get('width') - 20;
 
-        fo.setAttribute('x', (this.model.get('x') - this.model.attributes.width / 2) + 10);
-        fo.setAttribute('y', this.model.get('y') - this.model.get('height')/2 + 20);
         fo.setAttribute('width', txtWidth );
 
         text.style["max-width"] = txtWidth + 'px';
 
-
-        rect.setAttribute('x', this.model.attributes.x - this.model.attributes.width / 2);
-        rect.setAttribute('y', this.model.attributes.y - this.model.attributes.height / 2);
         rect.setAttribute('width', this.model.attributes.width);
         rect.setAttribute('height', this.model.attributes.height);
         rect.setAttribute('data-id', this.model.id);
 
-        rect.classList.toggle('highlight', this.model.get('highlight'));
 
         return this;
     },

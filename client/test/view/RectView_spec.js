@@ -32,7 +32,7 @@ describe('Tests for RectView', function() {
     // console.log(Object.getPrototypeOf(this.rectView.model));
     // console.log(Object.getPrototypeOf(Object.getPrototypeOf(this.rectView.model)));
      // console.log(this.rectView.model);
-    expect(this.rectView.model.get('label')).toBe('');
+    expect(this.rectView.model.get('label')).toBe('Click to edit');
     expect(this.rectView.model.get('width')).toBe(100);
     expect(this.rectView.model.get('height')).toBe(100);
   });

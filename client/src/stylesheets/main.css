@@ -41,7 +41,11 @@ path.link.hidden {
   /*text-align: left;*/
 }
 .insideforeign {
-  display: inline-block;
+  background-color:rgba(0,0,0,0);
+  border: none;
+  padding:0;
+  margin:0;
+
   text-align: center;
   color: orange;
   /*display: flex;*/

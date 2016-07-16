@@ -23,12 +23,12 @@ var rectView = Backbone.View.extend({
     },
 
     handleEditLabel: _.debounce(function(e) {
-        var text = e.target.textContent;
+        var text = e.target.value;
         // grab text from dom
         //var text = this.el.querySelecto
         // set text
         this.model.set('label', text);
-        //this.model.save();
+        this.model.save();
     }, 500),
 
 
@@ -47,19 +47,18 @@ var rectView = Backbone.View.extend({
         // Credt to john ktejik
         //http://stackoverflow.com/questions/9308938/inline-text-editing-in-svg
         var myforeign = document.createElementNS(namespace, 'foreignObject')
-        var textdiv = document.createElement("div");
-        var textnode = document.createTextNode("Click to edit");
-        textdiv.setAttribute("contentEditable", "true");
-        textdiv.setAttribute("width", "auto");
-        myforeign.classList.add("foreign"); //to make div fit text
-        textdiv.classList.add("insideforeign"); //to make div fit text
+        var inputTxt = document.createElement("textarea");
+
+
+        inputTxt.setAttribute("width", "auto");
+        myforeign.classList.add("foreign");
+        inputTxt.classList.add("insideforeign");
 
 
         // add elements to group svg
         group.appendChild(rect);
         group.appendChild(myforeign);
-        myforeign.appendChild(textdiv);
-        textdiv.appendChild(textnode);
+        myforeign.appendChild(inputTxt);
 
 
         // Listeners
@@ -106,6 +105,11 @@ var rectView = Backbone.View.extend({
     renderData: function() {
         var rect = this.el.firstChild;
         rect.classList.toggle('highlight', this.model.get('highlight'));
+
+        var fo = this.el.lastChild;
+        var labelArea = fo.firstChild;
+
+        labelArea.value = this.model.get('label');
     },
 
     renderPos: function() {
@@ -127,12 +131,12 @@ var rectView = Backbone.View.extend({
 
         var rect = this.el.firstChild;
         var fo = this.el.lastChild;
-        var text = fo.firstChild;
+        var labelArea = fo.firstChild;
         var txtWidth = this.model.get('width') - 20;
 
         fo.setAttribute('width', txtWidth );
 
-        text.style["max-width"] = txtWidth + 'px';
+        labelArea.style["max-width"] = txtWidth + 'px';
 
         rect.setAttribute('width', this.model.attributes.width);
         rect.setAttribute('height', this.model.attributes.height);
@@ -143,6 +147,7 @@ var rectView = Backbone.View.extend({
     },
 
     handleDragStart: function (d, i, sel) {
+
         console.log('drag start');
 
         if (d3_selection.event.sourceEvent.shiftKey) {

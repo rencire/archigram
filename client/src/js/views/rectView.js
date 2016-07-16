@@ -43,9 +43,14 @@ var rectView = Backbone.View.extend({
 
 
         // Create editable text ele
-        // To make text editable, look into usinga  foreignObject
-        // Credt to john ktejik
-        //http://stackoverflow.com/questions/9308938/inline-text-editing-in-svg
+        // - To make text editable, look into using foreignObject
+        // - Credit to John Ktejik
+        //     - http://stackoverflow.com/questions/9308938/inline-text-editing-in-svg
+
+        // Alternative:
+        // - Consider Eric Forgy's solution:
+        //     - https://groups.google.com/forum/#!topic/d3-js/3jTaajInaJs
+        //     - http://jsfiddle.net/eforgy/ppoakf0k/
         var myforeign = document.createElementNS(namespace, 'foreignObject')
         var inputTxt = document.createElement("textarea");
 

@@ -1,5 +1,7 @@
 ## Archigram
-Archigram is a simple tool to help with drawing graphs.  Original purpose is to help with drawing software architecture diagrams.
+Archigram is a simple tool to help with drawing "boxes and arrows".  Inspiration comes from wanting to easily draw software architecture diagrams.
+
+Main purpose of this project is to compare and contrast different javascript libraries/frameworks/patterns (similar to the infamous todos list app).
 
 Currently a WIP.
 
